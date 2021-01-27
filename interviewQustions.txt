@@ -1,0 +1,13 @@
+1.Which act as a os in Hadoop 2.0 ? 
+
+2.What is the use of zoo keeper ? 
+
+3.Meaning of balancing in Hadoop structure .?
+
+4.What is meant by schema ?
+
+5.Give some examples of unstructured data which we are using in real time ?
+
+6.define map reduce .
+7.importance of big data .
+8. What is the use of replication and default replication factor ?
