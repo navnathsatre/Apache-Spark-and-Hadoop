@@ -1,0 +1,247 @@
+CREATE TABLE customer_Sai(custid INT,firstname VARCHAR(20),lastname VARCHAR(20),city varchar(50),age int,createdt date,transactamt int );
+insert into customer_Sai values(1,'Arun','Kumar','chennai',33,'2015-09-20',100000);
+insert into customer_Sai values(2,'srini','vasan','chennai',33,'2015-09-21',10000);
+insert into customer_Sai values(3,'vasu','devan','banglore',39,'2015-09-23',90000);
+insert into customer_Sai values(4,'mohamed','imran','hyderabad',33,'2015-09-24',1000);
+
+If you want to update the 6th record throuigh sqoop , we can use the below command.
+
+
+Host:cxln2.c.thelab-240901.internal
+Command for MYSQL in cluster:
+mysql -h cxln2.c.thelab-240901.internal -u sqoopuser -pNHkkP876rp
+
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun -m 1 --tar
+get-dir /user/gadirajumidhun6255/Sqoop_test
+
+Result :
+-----------------------------------------------------------------------------------------------------------
+
+
+-bash-4.2$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun -m 1 --target-dir /user/achievesai8637/SaiMidhun/Sqoop_test
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/02/19 13:51:31 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/02/19 13:51:31 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/02/19 13:51:31 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/02/19 13:51:31 INFO tool.CodeGenTool: Beginning code generation
+20/02/19 13:51:31 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/19 13:51:32 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/19 13:51:32 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-achievesai8637/compile/0d63470b3e07599a535f931c9a6d7fc9/customer_Midhun.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/02/19 13:51:33 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-achievesai8637/compile/0d63470b3e07599a535f931c9a6d7fc9/customer_Midhun.jar
+20/02/19 13:51:33 WARN manager.MySQLManager: It looks like you are importing from mysql.
+20/02/19 13:51:33 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+20/02/19 13:51:33 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+20/02/19 13:51:33 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+20/02/19 13:51:33 INFO mapreduce.ImportJobBase: Beginning import of customer_Midhun
+20/02/19 13:51:34 INFO client.RMProxy: Connecting to ResourceManager at cxln2.c.thelab-240901.internal/10.142.1.2:8050
+20/02/19 13:51:35 INFO client.AHSProxy: Connecting to Application History server at cxln2.c.thelab-240901.internal/10.142.1.2:10200
+20/02/19 13:51:36 INFO db.DBInputFormat: Using read commited transaction isolation
+20/02/19 13:51:36 INFO mapreduce.JobSubmitter: number of splits:1
+20/02/19 13:51:37 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1579805754719_6187
+20/02/19 13:51:41 INFO impl.YarnClientImpl: Submitted application application_1579805754719_6187
+20/02/19 13:51:41 INFO mapreduce.Job: The url to track the job: http://cxln2.c.thelab-240901.internal:8088/proxy/application_1579805754719_6187/
+20/02/19 13:51:41 INFO mapreduce.Job: Running job: job_1579805754719_6187
+20/02/19 13:51:48 INFO mapreduce.Job: Job job_1579805754719_6187 running in uber mode : false
+20/02/19 13:51:48 INFO mapreduce.Job:  map 0% reduce 0%
+20/02/19 13:51:54 INFO mapreduce.Job:  map 100% reduce 0%
+20/02/19 13:51:54 INFO mapreduce.Job: Job job_1579805754719_6187 completed successfully
+20/02/19 13:51:54 INFO mapreduce.Job: Counters: 30
+        File System Counters
+                FILE: Number of bytes read=0
+                FILE: Number of bytes written=169345
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=87
+                HDFS: Number of bytes written=258
+                HDFS: Number of read operations=4
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+        Job Counters 
+                Launched map tasks=1
+                Other local map tasks=1
+                Total time spent by all maps in occupied slots (ms)=39144
+                Total time spent by all reduces in occupied slots (ms)=0
+                Total time spent by all map tasks (ms)=3262
+                Total vcore-milliseconds taken by all map tasks=3262
+                Total megabyte-milliseconds taken by all map tasks=5010432
+        Map-Reduce Framework
+                Map input records=6
+                Map output records=6
+                Input split bytes=87
+                Spilled Records=0
+                Failed Shuffles=0
+                Merged Map outputs=0
+                GC time elapsed (ms)=53
+                CPU time spent (ms)=1770
+                Physical memory (bytes) snapshot=287518720
+                Virtual memory (bytes) snapshot=4643786752
+                Total committed heap usage (bytes)=256376832
+        File Input Format Counters 
+                Bytes Read=0
+        File Output Format Counters 
+                Bytes Written=258
+20/02/19 13:51:54 INFO mapreduce.ImportJobBase: Transferred 258 bytes in 19.9063 seconds (12.9607 bytes/sec)
+20/02/19 13:51:54 INFO mapreduce.ImportJobBase: Retrieved 6 records.
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+We can insert a record into the MYSQL using sqoop as shown below .
+Sqoop Eval :
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "insert into customer_Sai values (6,'ramesh','babu','manglore',39,'2015-09-21',100000)"
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 04:03:09 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/04/04 04:03:09 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/04/04 04:03:09 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 04:03:09 INFO tool.EvalSqlTool: 1 row(s) updated.
+[gadirajumidhun6255@cxln4 ~]$ ^C
+----------------------------------------------------------------
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun -m 2 --split-by custid --target-dir /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers
+
+
+
+
+Result:
+-bash-4.2$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun -m 2 --split-by custid --target-dir /user/achievesai8637/SaiMidhun/Sqoop_test
+2_2mappers
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/02/19 15:09:36 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/02/19 15:09:36 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/02/19 15:09:36 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/02/19 15:09:36 INFO tool.CodeGenTool: Beginning code generation
+20/02/19 15:09:36 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/19 15:09:36 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/19 15:09:36 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-achievesai8637/compile/c97eb6599d85c5b7a1d366485ee3d439/customer_Midhun.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/02/19 15:09:38 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-achievesai8637/compile/c97eb6599d85c5b7a1d366485ee3d439/customer_Midhun.jar
+20/02/19 15:09:38 WARN manager.MySQLManager: It looks like you are importing from mysql.
+20/02/19 15:09:38 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+20/02/19 15:09:38 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+20/02/19 15:09:38 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+20/02/19 15:09:38 INFO mapreduce.ImportJobBase: Beginning import of customer_Midhun
+20/02/19 15:09:39 INFO client.RMProxy: Connecting to ResourceManager at cxln2.c.thelab-240901.internal/10.142.1.2:8050
+20/02/19 15:09:39 INFO client.AHSProxy: Connecting to Application History server at cxln2.c.thelab-240901.internal/10.142.1.2:10200
+20/02/19 15:09:46 INFO db.DBInputFormat: Using read commited transaction isolation
+20/02/19 15:09:46 INFO db.DataDrivenDBInputFormat: BoundingValsQuery: SELECT MIN(`custid`), MAX(`custid`) FROM `customer_Midhun`
+20/02/19 15:09:46 INFO db.IntegerSplitter: Split size: 3; Num splits: 2 from: 1 to: 7
+20/02/19 15:09:46 INFO mapreduce.JobSubmitter: number of splits:2
+20/02/19 15:09:47 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1579805754719_6202
+20/02/19 15:09:47 INFO impl.YarnClientImpl: Submitted application application_1579805754719_6202
+20/02/19 15:09:47 INFO mapreduce.Job: The url to track the job: http://cxln2.c.thelab-240901.internal:8088/proxy/application_1579805754719_6202/
+20/02/19 15:09:47 INFO mapreduce.Job: Running job: job_1579805754719_6202
+20/02/19 15:10:06 INFO mapreduce.Job: Job job_1579805754719_6202 running in uber mode : false
+20/02/19 15:10:06 INFO mapreduce.Job:  map 0% reduce 0%
+20/02/19 15:10:29 INFO mapreduce.Job:  map 100% reduce 0%
+20/02/19 15:10:29 INFO mapreduce.Job: Job job_1579805754719_6202 completed successfully
+20/02/19 15:10:29 INFO mapreduce.Job: Counters: 30
+        File System Counters
+                FILE: Number of bytes read=0
+                FILE: Number of bytes written=338994
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=213
+                HDFS: Number of bytes written=302
+                HDFS: Number of read operations=8
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=4
+        Job Counters 
+                Launched map tasks=2
+                Other local map tasks=2
+                Total time spent by all maps in occupied slots (ms)=393828
+                Total time spent by all reduces in occupied slots (ms)=0
+                Total time spent by all map tasks (ms)=32819
+                Total vcore-milliseconds taken by all map tasks=32819
+                Total megabyte-milliseconds taken by all map tasks=50409984
+        Map-Reduce Framework
+                Map input records=7
+                Map output records=7
+                Input split bytes=213
+                Spilled Records=0
+                Failed Shuffles=0
+                Merged Map outputs=0
+                GC time elapsed (ms)=124
+                CPU time spent (ms)=3390
+                Physical memory (bytes) snapshot=510578688
+                Virtual memory (bytes) snapshot=9224871936
+                Total committed heap usage (bytes)=476577792
+        File Input Format Counters 
+                Bytes Read=0
+        File Output Format Counters 
+                Bytes Written=302
+20/02/19 15:10:29 INFO mapreduce.ImportJobBase: Transferred 302 bytes in 49.8497 seconds (6.0582 bytes/sec)
+20/02/19 15:10:29 INFO mapreduce.ImportJobBase: Retrieved 7 records.
+-bash-4.2$ 
+
+
+-bash-4.2$ hdfs dfs -ls /user/achievesai8637/SaiMidhun/
+Found 3 items
+drwxr-xr-x   - achievesai8637 achievesai8637          0 2020-02-19 13:51 /user/achievesai8637/SaiMidhun/Sqoop_test
+drwxr-xr-x   - achievesai8637 achievesai8637          0 2020-02-19 14:23 /user/achievesai8637/SaiMidhun/Sqoop_test1
+drwxr-xr-x   - achievesai8637 achievesai8637          0 2020-02-19 15:10 /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers
+-bash-4.2$ hdfs dfs -ls /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers
+Found 3 items
+-rw-r--r--   3 achievesai8637 achievesai8637          0 2020-02-19 15:10 /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers/_SUCCESS
+-rw-r--r--   3 achievesai8637 achievesai8637        126 2020-02-19 15:10 /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers/part-m-00000
+-rw-r--r--   3 achievesai8637 achievesai8637        176 2020-02-19 15:10 /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers/part-m-00001
+-bash-4.2$ hdfs dfs -ls /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers/part-m-00000
+-rw-r--r--   3 achievesai8637 achievesai8637        126 2020-02-19 15:10 /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers/part-m-00000
+-bash-4.2$ hdfs dfs -cat /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers/part-m-00000
+2,srini,vasan,chennai,33,2015-09-21,10000
+1,Arun,Kumar,chennai,33,2015-09-20,100000
+3,vasu,devan,banglore,39,2015-09-23,90000
+-bash-4.2$ hdfs dfs -cat /user/achievesai8637/SaiMidhun/Sqoop_test2_2mappers/part-m-00001
+4,mohamed,imran,hyderabad,33,2015-09-24,1000
+5,arun,basker,chennai,23,2015-09-20,200000
+6,ramesh,babu,manglore,39,2015-09-21,100000
+7,ramesh,babu,manglore,39,2015-09-21,100000
+
+
+---------------------------------------------------------------------------------------------------
+
+if we do the sqoop import without giving split by then see the below .
+-bash-4.2$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun -m 2  --target-dir /user/achievesai8637/SaiMidhun/Sqoop_test2_nosplit
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/02/19 15:16:51 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/02/19 15:16:51 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/02/19 15:16:51 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/02/19 15:16:51 INFO tool.CodeGenTool: Beginning code generation
+20/02/19 15:16:52 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/19 15:16:52 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/19 15:16:52 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-achievesai8637/compile/7149dc8cb37d10ded16d681a8da374c2/customer_Midhun.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/02/19 15:16:54 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-achievesai8637/compile/7149dc8cb37d10ded16d681a8da374c2/customer_Midhun.jar
+20/02/19 15:16:54 WARN manager.MySQLManager: It looks like you are importing from mysql.
+20/02/19 15:16:54 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+20/02/19 15:16:54 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+20/02/19 15:16:54 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+20/02/19 15:16:54 ERROR tool.ImportTool: Error during import: No primary key could be found for table customer_Midhun. Please specify one with --split-by or perform a sequential import with '-m 1'.
+
+It will check for primary key , since there is no primary key set for the table , we got error .
+
+Command for Eval:
+sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "select * from customer_Mid
+hun"
+
