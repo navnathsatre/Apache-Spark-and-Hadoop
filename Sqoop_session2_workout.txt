@@ -1,0 +1,326 @@
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun --target-dir /user/achievesai8637/SaiMidhun/Sqoop_ses2
+
+output:
+ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun --target-d
+ir /user/achievesai8637/SaiMidhun/Sqoop_ses2
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/02/23 04:27:23 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/02/23 04:27:23 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/02/23 04:27:23 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/02/23 04:27:23 INFO tool.CodeGenTool: Beginning code generation
+20/02/23 04:27:24 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/23 04:27:24 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/23 04:27:24 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-achievesai8637/compile/01e22e9f9d1b377feb0de30efe7b4003/customer_Midhun.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/02/23 04:27:25 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-achievesai8637/compile/01e22e9f9d1b377feb0de30efe7b4003/customer_Midhun.jar
+20/02/23 04:27:25 WARN manager.MySQLManager: It looks like you are importing from mysql.
+20/02/23 04:27:25 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+20/02/23 04:27:25 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+20/02/23 04:27:25 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+20/02/23 04:27:25 ERROR tool.ImportTool: Error during import: No primary key could be found for table customer_Midhun. Please specify one with --split-by or perfor
+m a sequential import with '-m 1'.
+-bash-4.2$ 
+
+from the above output we can see it is expecting split by or primary key ...
+since we have not kept the primary key , we need to go for split by ...
+
+see now ...
+
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun --split-by custid --target-dir /user/achievesai8637/SaiMidhun/Sqoop_ses2
+
+Now the job will execute...
+
+
+---------
+-bash-4.2$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun --split-by
+ custid --target-dir /user/achievesai8637/SaiMidhun/Sqoop_ses2
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/02/23 04:30:29 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/02/23 04:30:29 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/02/23 04:30:29 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/02/23 04:30:29 INFO tool.CodeGenTool: Beginning code generation
+20/02/23 04:30:30 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/23 04:30:30 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Midhun` AS t LIMIT 1
+20/02/23 04:30:30 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-achievesai8637/compile/d4f4b7d499d00700f29f71c5480233de/customer_Midhun.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/02/23 04:30:31 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-achievesai8637/compile/d4f4b7d499d00700f29f71c5480233de/customer_Midhun.jar
+20/02/23 04:30:31 WARN manager.MySQLManager: It looks like you are importing from mysql.
+20/02/23 04:30:31 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+20/02/23 04:30:31 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+20/02/23 04:30:31 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+20/02/23 04:30:31 INFO mapreduce.ImportJobBase: Beginning import of customer_Midhun
+20/02/23 04:30:33 INFO client.RMProxy: Connecting to ResourceManager at cxln2.c.thelab-240901.internal/10.142.1.2:8050
+20/02/23 04:30:33 INFO client.AHSProxy: Connecting to Application History server at cxln2.c.thelab-240901.internal/10.142.1.2:10200
+20/02/23 04:30:35 INFO db.DBInputFormat: Using read commited transaction isolation
+20/02/23 04:30:35 INFO db.DataDrivenDBInputFormat: BoundingValsQuery: SELECT MIN(`custid`), MAX(`custid`) FROM `customer_Midhun`
+20/02/23 04:30:35 INFO db.IntegerSplitter: Split size: 1; Num splits: 4 from: 1 to: 7
+20/02/23 04:30:35 INFO mapreduce.JobSubmitter: number of splits:4
+20/02/23 04:30:35 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1582215230149_0620
+20/02/23 04:30:36 INFO impl.YarnClientImpl: Submitted application application_1582215230149_0620
+20/02/23 04:30:36 INFO mapreduce.Job: The url to track the job: http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_0620/
+20/02/23 04:30:36 INFO mapreduce.Job: Running job: job_1582215230149_0620
+20/02/23 04:30:43 INFO mapreduce.Job: Job job_1582215230149_0620 running in uber mode : false
+20/02/23 04:30:43 INFO mapreduce.Job:  map 0% reduce 0%
+20/02/23 04:30:49 INFO mapreduce.Job:  map 25% reduce 0%
+20/02/23 04:30:50 INFO mapreduce.Job:  map 75% reduce 0%
+20/02/23 04:30:51 INFO mapreduce.Job:  map 100% reduce 0%
+20/02/23 04:30:51 INFO mapreduce.Job: Job job_1582215230149_0620 completed successfully
+20/02/23 04:30:51 INFO mapreduce.Job: Counters: 30
+        File System Counters
+                FILE: Number of bytes read=0
+                FILE: Number of bytes written=678540
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=425
+                HDFS: Number of bytes written=302
+                HDFS: Number of read operations=16
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=8
+20/02/23 04:30:43 INFO mapreduce.Job:  map 0% reduce 0%
+20/02/23 04:30:49 INFO mapreduce.Job:  map 25% reduce 0%
+
+
+20/02/23 04:30:50 INFO mapreduce.Job:  map 75% reduce 0%
+20/02/23 04:30:51 INFO mapreduce.Job:  map 100% reduce 0%
+20/02/23 04:30:51 INFO mapreduce.Job: Job job_1582215230149_0620 completed successfully
+20/02/23 04:30:51 INFO mapreduce.Job: Counters: 30
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+-bash-4.2$ hadoop dfs -ls /user/achievesai8637/SaiMidhun/Sqoop_ses2
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+Found 5 items
+-rw-r--r--   3 achievesai8637 achievesai8637          0 2020-02-23 04:30 /user/achievesai8637/SaiMidhun/Sqoop_ses2/_SUCCESS
+-rw-r--r--   3 achievesai8637 achievesai8637         84 2020-02-23 04:30 /user/achievesai8637/SaiMidhun/Sqoop_ses2/part-m-00000
+-rw-r--r--   3 achievesai8637 achievesai8637         87 2020-02-23 04:30 /user/achievesai8637/SaiMidhun/Sqoop_ses2/part-m-00001
+-rw-r--r--   3 achievesai8637 achievesai8637         43 2020-02-23 04:30 /user/achievesai8637/SaiMidhun/Sqoop_ses2/part-m-00002
+-rw-r--r--   3 achievesai8637 achievesai8637         88 2020-02-23 04:30 /user/achievesai8637/SaiMidhun/Sqoop_ses2/part-m-00003
+-bash-4.2$ 
+------------------------------------------------------------------------------------------------------------------------
+
+sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query “select * from customer_Midhun"
+
+-bash-4.2$ sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "select * from customer_Mid
+hun"
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/02/23 04:46:47 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/02/23 04:46:47 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/02/23 04:46:47 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+-----------------------------------------------------------------------------------------------------------------------------
+| custid      | firstname            | lastname             | city                 | age         | createdt   | transactamt | 
+-----------------------------------------------------------------------------------------------------------------------------
+| 2           | srini                | vasan                | chennai              | 33          | 2015-09-21 | 10000       | 
+| 1           | Arun                 | Kumar                | chennai              | 33          | 2015-09-20 | 100000      | 
+| 3           | vasu                 | devan                | banglore             | 39          | 2015-09-23 | 90000       | 
+| 4           | mohamed              | imran                | hyderabad            | 33          | 2015-09-24 | 1000        | 
+| 5           | arun                 | basker               | chennai              | 23          | 2015-09-20 | 200000      | 
+| 6           | ramesh               | babu                 | manglore             | 39          | 2015-09-21 | 100000      | 
+| 7           | ramesh               | babu                 | manglore             | 39          | 2015-09-21 | 100000      | 
+-----------------------------------------------------------------------------------------------------------------------------
+-bash-4.2$ 
+
+------------------
+controlling input example :
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --table customer_Midhun -m 1 --where "city ='chennai'" --target-dir /user/achievesai8637/SaiMidhun/filtered	
+Incremental import:
+
+-bash-4.2$ hadoop dfs -ls /user/achievesai8637/SaiMidhun/filtered
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+Found 2 items
+-rw-r--r--   3 achievesai8637 achievesai8637          0 2020-02-23 05:30 /user/achievesai8637/SaiMidhun/filtered/_SUCCESS
+-rw-r--r--   3 achievesai8637 achievesai8637        127 2020-02-23 05:30 /user/achievesai8637/SaiMidhun/filtered/part-m-00000
+-bash-4.2$ hadoop dfs -cat /user/achievesai8637/SaiMidhun/filtered/part-m-00000
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+2,srini,vasan,chennai,33,2015-09-21,10000
+1,Arun,Kumar,chennai,33,2015-09-20,100000
+5,arun,basker,chennai,23,2015-09-20,200000
+-bash-4.2$ 
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+Incremental Append Import :
+
+Output:
+[gadirajumidhun6255@cxln4 ~]$ 
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Sai -m 1 --target-dir /user/gadirajumidhun6255/Sai_btch/incr_import --incremental append --check-column custid --last-value 0
+
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 04:35:07 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/04/04 04:35:07 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/04/04 04:35:08 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 04:35:08 INFO tool.CodeGenTool: Beginning code generation
+20/04/04 04:35:08 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+20/04/04 04:35:08 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+20/04/04 04:35:08 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-gadirajumidhun6255/compile/612050e8894fbabf13e7538df1ba6353/customer_Sai.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/04/04 04:35:10 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-gadirajumidhun6255/compile/612050e8894fbabf13e7538df1ba6353/customer_Sai
+.jar
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "insert into customer_Sai values (7,'mahesh','babu','bangalore',40,'2015-09-28',400000)"
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 04:39:10 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/04/04 04:39:10 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/04/04 04:39:11 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 04:39:11 INFO tool.EvalSqlTool: 1 row(s) updated.
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "insert into customer_Sai values (8,'pavan','babu','chennai',50,'2015-09-28',4000000)"
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 04:39:48 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/04/04 04:39:48 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/04/04 04:39:48 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 04:39:48 INFO tool.EvalSqlTool: 1 row(s) updated.
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "insert into customer_Sai values (9,'ram','krishna','hyderabad',30,'2015-09-28',4000000)"
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 04:40:25 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Sai -m 1 --target-dir /user/gadirajumidhun6255/Sai_btch/incr_import --incremental append --check-column custid --last-value 6
+
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 04:41:11 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/04/04 04:41:12 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/04/04 04:41:12 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 04:41:12 INFO tool.CodeGenTool: Beginning code generation
+20/04/04 04:41:12 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+20/04/04 04:41:12 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+
+
+---------------------------------------------------------------------------------------
+
+Sqoop Job:
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop job --create Sai_sqoopJob -- import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Sai -m 1 --target-dir /user/gadirajumidhun6255/Sai_btch/job_incrimport --incremental append --check-column custid --last-value 0
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 05:01:25 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/04/04 05:01:26 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop job --list
+
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 05:02:25 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+Available jobs:
+  Greensjob
+  Sai_sqoopJob
+  kkjob
+[gadirajumidhun6255@cxln4 ~]$ 
+
+Eecuting the Sqoop Job :
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop job --exec Sai_sqoopJob
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 05:03:54 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+Enter password: 
+20/04/04 05:04:25 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 05:04:26 INFO tool.CodeGenTool: Beginning code generation
+20/04/04 05:04:26 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+20/04/04 05:04:26 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+20/04/04 05:04:26 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-gadirajumidhun6255/compile/ca1284c6879385c05d6c128419f9e0d1/customer_Sai.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/04/04 05:04:28 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-gadirajumidhun6255/compile/ca1284c6879385c05d6c128419f9e0d1/customer_Sai
+.jar
+20/04/04 05:04:29 INFO tool.ImportTool: Maximal id query for free form incremental import: SELECT MAX(`custid`) FROM `customer_Sai`
+20/04/04 05:04:29 INFO tool.ImportTool: Incremental import based on column `custid`
+
+-----------------------------------------------------------------------
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "insert into customer_Sai values (10,'mohan','krishna','nellore',50,'2015-09-28',60000)"
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 05:07:12 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+20/04/04 05:07:12 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+20/04/04 05:07:12 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 05:07:13 INFO tool.EvalSqlTool: 1 row(s) updated.
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop eval --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --query "insert into customer_Sai values (11,'kalyan','krishna','nellore',30,'2015-09-30',600000)"
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop job --exec Sai_sqoopJob
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+20/04/04 05:11:17 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+Enter password: 
+20/04/04 05:11:30 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+20/04/04 05:11:30 INFO tool.CodeGenTool: Beginning code generation
+20/04/04 05:11:30 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+20/04/04 05:11:30 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_Sai` AS t LIMIT 1
+20/04/04 05:11:30 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-gadirajumidhun6255/compile/210865dae0cf9f86988593ca250b795e/customer_Sai.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+20/04/04 05:11:33 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-gadirajumidhun6255/compile/210865dae0cf9f86988593ca250b795e/customer_Sai
+.jar
+20/04/04 05:11:34 INFO tool.ImportTool: Maximal id query for free form incremental import: SELECT MAX(`custid`) FROM `customer_Sai`
+20/04/04 05:11:34 INFO tool.ImportTool: Incremental import based on column `custid`
+20/04/04 05:11:34 INFO to
+
+20/04/04 05:11:57 INFO tool.ImportTool: Updated data for job: Sai_sqoopJob
+[gadirajumidhun6255@cxln4 ~]$ hadoop dfs -ls /user/gadirajumidhun6255/Sai_btch/job_incrimport/
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+Found 2 items
+-rw-r--r--   3 gadirajumidhun6255 gadirajumidhun6255        349 2020-04-04 05:04 /user/gadirajumidhun6255/Sai_btch/job_incrimport/part-m-00000
+-rw-r--r--   3 gadirajumidhun6255 gadirajumidhun6255         92 2020-04-04 05:11 /user/gadirajumidhun6255/Sai_btch/job_incrimport/part-m-00001
+[gadirajumidhun6255@cxln4 ~]$ 
