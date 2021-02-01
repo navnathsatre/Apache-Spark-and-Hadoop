@@ -1,0 +1,122 @@
+hive-site.xml path /etc/hive/conf 
+
+hive> set hive.execution.engine=tez;
+hive> set hive.execution.engine=mr;
+hive> set hive.execution.engine=spark;
+
+---------------------------------------------------------------------------------------
+getting data from the AVRO and display it ...
+
+
+hive> CREATE EXTERNAL TABLE avro_hive_tab ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat' OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat' LOCATION 'hdfs:///user/achievesai8637/SaiMidhun/sqoop_avro/' TBLPROPERTIES ('avro.schema.url'= 'hdfs:///user/achievesai8637/SaiMidhun/customer_Midhun.avsc');
+OK
+Time taken: 0.153 seconds
+hive> select * from avro_hive_tab;
+OK
+2       srini   vasan   chennai 33      1442793600000   10000
+1       Arun    Kumar   chennai 33      1442707200000   100000
+3       vasu    devan   banglore        39      1442966400000   90000
+4       mohamed imran   hyderabad       33      1443052800000   1000
+5       arun    basker  chennai 23      1442707200000   200000
+6       ramesh  babu    manglore        39      1442793600000   100000
+7       ramesh  babu    manglore        39      1442793600000   100000
+8       mahesh  babu    hyderabad       50      1442793600000   900000
+9       kalyan  babu    nellore 55      1442793600000   1900000
+10      ram     charan  vijaywada       35      1426896000000   900000
+11      arjun   allu    vijaywada       38      1442880000000   900000
+Time taken: 0.456 seconds, Fetched: 11 row(s)
+hive> 
+-------------------------------------------------------------------------------------------------
+Creating the table on parquet ...
+
+hive> use hive_b1;
+OK
+Time taken: 1.874 seconds
+hive> CREATE EXTERNAL TABLE parqt_hive  ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' STORED AS AVRO TBLPROPERTIES ('avro.schema.url'='hdfs:///user/achievesai8637/SaiMidhun/cust_midhun_test.avsc');
+OK
+Time taken: 0.413 seconds
+
+
+
+hive> CREATE EXTERNAL TABLE parquet_test LIKE parqt_hive STORED AS PARQUET LOCATION 'hdfs:///user/achievesai8637/SaiMidhun/Parqt/08a370df-604d-4850-bd22-9bc2c08b7b03.parquet';
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:hdfs://cxln1.c.thelab-240901.internal:8020/user/achievesai8637/SaiMidhun/Parqt/08a370df-604d-4850-bd22-9bc2c08b7b03.parquet 
+is not a directory or unable to create one)
+
+
+
+CREATE EXTERNAL TABLE parquet_test LIKE parqt_hive STORED AS PARQUET LOCATION 'hdfs:///user/achievesai8637/SaiMidhun/Parqt';
+OK
+Time taken: 0.305 seconds
+hive> select * from parquet_test;
+OK
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+2       srini   vasan   chennai 33      1442793600000   NULL
+1       Arun    Kumar   chennai 33      1442707200000   NULL
+3       vasu    devan   banglore        39      1442966400000   NULL
+4       mohamed imran   hyderabad       33      1443052800000   NULL
+5       arun    basker  chennai 23      1442707200000   NULL
+6       ramesh  babu    manglore        39      1442793600000   NULL
+7       ramesh  babu    manglore        39      1442793600000   NULL
+8       mahesh  babu    hyderabad       50      1442793600000   NULL
+9       kalyan  babu    nellore 55      1442793600000   NULL
+10      ram     charan  vijaywada       35      1426896000000   NULL
+11      arjun   allu    vijaywada       38      1442880000000   NULL
+13      ram     babu    manglore        39      1442793600000   NULL
+14      raghu   babu    chennai 50      1442793600000   NULL
+15      haran   babu    bangalore       50      1442793600000   NULL
+16      hariram charan  vijaywada       35      1426896000000   NULL
+17      hari    charan  vijaywada       35      1426896000000   NULL
+
+---------------------------------------------------------------------------
+
+partition :
+
+hive> use hive_b1;
+OK
+Time taken: 1.676 seconds
+hive> create  table txnrecords(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) row format delimited fields terminated by ',' lines terminated by '\n'
+location '/user/achievesai8637/SaiMidhun/txn_records/';
+
+FAILED: ParseException line 1:13 cannot recognize input near 'first' '100' 'from' in selection target
+hive> select * from txnrecords limit 10;
+OK
+0       06-26-2011      4007024 40.33   Exercise & Fitness      Cardio Machine Accessories      Clarksville     Tennessee       credit
+1       05-26-2011      4006742 198.44  Exercise & Fitness      Weightlifting Gloves    Long Beach      California      credit
+2       06-01-2011      4009775 5.58    Exercise & Fitness      Weightlifting Machine Accessories       Anaheim California      credit
+3       06-05-2011      4002199 198.19  Gymnastics      Gymnastics Rings        Milwaukee       Wisconsin       credit
+4       12-17-2011      4002613 98.81   Team Sports     Field Hockey    Nashville       Tennessee       credit
+5       02-14-2011      4007591 193.63  Outdoor Recreation      Camping & Backpacking & Hiking  Chicago Illinois        credit
+6       10-28-2011      4002190 27.89   Puzzles Jigsaw Puzzles  Charleston      South Carolina  credit
+7       07-14-2011      4002964 96.01   Outdoor Play Equipment  Sandboxes       Columbus        Ohio    credit
+8       01-17-2011      4007361 10.44   Winter Sports   Snowmobiling    Des Moines      Iowa    credit
+9       05-17-2011      4004798 152.46  Jumping Bungee Jumping  St. Petersburg  Florida credit
+Time taken: 0.603 seconds, Fetched: 10 row(s)
+
+
+hive> select * from txnrecords where city = "Chicago";
+
+hive> select count(*)  from txnrecords where city = "Chicago";
+
+if we want to know how many ppl are located in chicago we will use the above query ...
+
+creating a partition table ...
+create  table txnrecords2(txnno INT, txndate STRING, custno INT, amount DOUBLE,product STRING,  state STRING, spendby STRING) partitioned by (city STRING,category string) row format delimited fields terminated by ',' lines terminated by '\n' location '/user/achievesai8637/SaiMidhun/txn_records/';
+
+hive> create  table txnrecords2_pt(txnno INT, txndate STRING, custno INT, amount DOUBLE,product STRING,  state STRING, spendby STRING) partitioned by (city STRING,category string) row format delimited fields terminated by ',' line
+s terminated by '\n';
+OK
+Time taken: 0.158 seconds
+inserting data ;
+
+
+hive> Insert into table txnrecords2_pt partition (city,category) select txnno,txndate,custno,amount, product,state,spendby,city,category from txnrecords;
+FAILED: SemanticException [Error 10096]: Dynamic partition strict mode requires at least one static partition column. To turn this off set hive.exec.dynamic.partition.mode=nonstrict
+hive> set hive.exec.dynamic.partition.mode=nonstrict
+    > ;
+hive> Insert into table txnrecords2_pt partition (city,category) select txnno,txndate,custno,amount, product,state,spendby,city,category from txnrecords;
+Query ID = achievesai8637_20200306170714_5229fb77-b809-41dc-b29e-d03c538b46b3
+Total jobs = 3
+Launching Job 1 out of 3
+
