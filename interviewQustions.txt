@@ -1,3 +1,5 @@
+gadirajumidhun@gmail.com
+
 1.Which act as a os in Hadoop 2.0 ? 
 
 2.What is the use of zoo keeper ? 

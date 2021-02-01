@@ -1,0 +1,217 @@
+﻿					
+					Sqoop Workouts
+
+
+Create and Select the test database:
+create database test;
+use test;
+
+CREATE TABLE customer(custid INT,firstname VARCHAR(20),lastname VARCHAR(20),city varchar(50),age int,createdt date,transactamt int );
+
+insert into customer values(1,'Arun','Kumar','chennai',33,'2015 -09-20',100000);
+insert into customer values(2,'srini','vasan','chennai',33,'2015-09-21',10000);
+insert into customer values(3,'vasu','devan','banglore',39,'2015 -09-23',90000);
+insert into customer values(4,'mohamed','imran','hyderabad',33,'2015 -09-24',1000);
+insert into customer values(5,'arun','basker','chennai',23,'2015 -09-20',200000);
+
+sqoop eval --connect jdbc:mysql://localhost/test --username root --password cloudera --query “insert into customer values(6,'ramesh','babu','manglore',39,'2015 -09-21',100000);”;
+
+
+SQOOP WORKOUTS (Open a separate linux terminal)
+
+To List Databases which are in MySql
+
+sqoop list-databases --connect jdbc:mysql://localhost --username root --password cloudera;
+
+To List Tables from test database
+
+sqoop list-tables --connect jdbc:mysql://localhost/test --username root --password cloudera;
+
+
+
+
+Import Table from SQL to HDFS:
+
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer -m 1 ;
+hadoop fs -rm -r /user/cloudera/customer
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --direct;
+hadoop fs -rm -r /user/cloudera/customer
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --target-dir sqoop_import;
+
+Check whether the below import works?
+
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 2;
+
+Import with --split-by option
+
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer -m 2 --split-by custid;
+
+hadoop fs -rm -r /user/hduser/customer
+s qoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 10 --split-by custid;
+hadoop fs -rm -r /user/cloudera/customer
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 2 --split-by city;
+
+Using Where condition:
+
+hadoop fs -rm -r /user/hduser/customer
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer -m 1 --where "city ='chennai'" --target-dir filtered	
+Incremental import:
+
+Execute the below insert in mysql
+
+insert into customer values(7,'md','irfan1','hyderabad',33,'2015 -09-28',10000);
+
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --target-dir incrimport --incremental append --check-column custid --last-value 0
+
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --target-dir incrimport --incremental append --check-column custid --last-value 6
+
+sqoop job --create fitajob --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --target-dir incrimport --incremental append --check-column custid --last-value 0
+
+Whether the below import works?
+
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --target-dir incrimport --incremental append --check-
+column city --last-value 'pune'
+
+sqoop job --create myjob1 -- import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --target-dir incrimport --incremental append --check-
+column city --last-value 'pune'
+
+Working with Saved Jobs:
+
+sqoop job --create myjob1 -- import --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer --target-dir savedjob -m 1
+
+list saved jobs:
+
+sqoop job -list
+
+Execute
+sqoop job --exec myjob1
+password: cloudera
+
+Incremental Saved jobs:
+sqoop job --create myjob2 -- import --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer --target-dir savedjob1 --m 1 --incremental append --check-column custid --last-value 0
+
+sqoop job --exec myjob2
+
+Passwod : root
+
+insert into customer values (8,'md','irfan1','pune',33,'2015 -09-28',10000);
+
+sqoop job --delete myjob2
+
+sqoop job --create myjob2 -- import --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer --target-dir savedjob1 --m 1 --incremental append --check-column custid --last-value 7
+
+sqoop job --exec myjob2
+
+
+Export from HDFS to SQL: ( Create table in MYSQL before running this commmand)
+
+CREATE TABLE customer1 (custid INT,firstname VARCHAR(20),lastname VARCHAR(20),city varchar(50),age
+int,createdt date,transactamt int );
+
+sqoop export  -Dsqoop.export.records.per.statement=10   --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer1 --export-dir savedjob1
+
+Fields terminated by & Lines terminated by
+
+sqoop import --connect jdbc:mysql://localhost/test --username root --password cloudera -table customer -m 1 --target-dir imp_del --fields-terminated-by '~' --lines-terminated-by '\n' --snappy;
+
+
+
+
+Which one the below export works?
+
+sqoop export --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer1 --export-dir imp_del;
+sqoop export --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer1 --export-dir imp_del --fields-terminated-by '~' --lines-terminated-by '\n';
+
+Incremental export - insert else update
+
+delete from customer1;
+
+insert into customer1 select * from customer;
+cd ~
+hadoop fs -get imp_del/part-m-00000 .
+hadoop fs -rm imp_del/part-m-00000
+vi ~/part-m-00000
+7~md~irfan1~hyderabad~33~2015-09-28~10000
+8~md~irfan1~Calcutta~33~2015-09-28~10000
+9~a~srini~chennai~38~2016-08-08~13000
+hadoop fs -put part-m-00000 imp_del/
+sqoop export --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer1 --export-dir imp_del --fields-terminated-by '~' --lines-
+terminated-by '\n' --update-key custid --update-mode updateonly;
+
+select * from customer1 ORDER BY 1;
+
+ALTER TABLE customer1 ADD PRIMARY KEY (custid);
+hadoop fs -rm imp_del/part-m-00000
+vi ~/part-m-00000
+8~md~irfan1~Mumbai~33~2015-09-28~10000
+10~a~Velu~chennai~33~2016-08-08~13000
+hadoop fs -put part-m-00000 imp_del/
+sqoop export --connect jdbc:mysql://localhost/test --username root --password cloudera --table customer1 --export-dir imp_del --fields-terminated-by '~' --lines-
+terminated-by '\n' --update-key custid --update-mode allowinsert;
+
+
+SQOOP Best Practices and Performance tuning
+
+
+Import:
+
+1. Definate number of mappers: - m
+a. More mappers can lead to faster jobs, but only up to a saturation point. This varies per table, job parameters, time of day
+  and server availability.
+b. Too many mappers will increase the number of parallel sessions on the database, hence affect source DB performance
+  affecting the regular workload of the DB.
+
+2. Use Direct mode for all available DBs.
+a. Rather than using the JDBC interface for transferring data, the direct mode delegatesthe job of transferring data to the
+  native utilities provided by the database vendor. For Eg. In the case of MySQL, the mysqldump and mysqlimport will be
+ used for retrieving data from the database server or moving data back.
+b. Escape characters, type mapping, column and row delimiters may not be supported. Binary format dont work.
+
+3. Splitting Data --split-by: Boundary Queries boundary-query
+
+a. By default, the primary key is used. Prior to starting the transfer, Sqoop will retrieve the min/max values for this column.
+  Changed column with the --split-by parameter
+		
+Select min(a.id) , max(a.id) from (SELECT a.id, a.name, b.id, b.name FROM a, b WHERE a.id = b.id AND
+$CONDITIONS) as temp
+-- boundary-query
+SELECT 0, MAX(id) FROM a
+
+
+Export:
+5. Defining mappers --num-mapper
+a.
+Number of simultaneous connections that will be opened against database. Sqoop will use that many processes to export
+data (each process will export slice of the data). Here you have to take care about the max open connections to your
+RDBMS, since this can overwhelm the RDBMS easily.
+
+6. BATCH mode batch
+
+a. Sqoop performs export row by row if we dont leverage batch mode option.
+b. Enabling batch mode will export more than one row at a time as batch of rows.
+
+7. Specify the number of records to export -Dsqoop.export.records.per.statement=10
+a.
+The above option will define how many number of rows should be used in each insert statements.
+
+8. Specify the number of records per transaction - -Dsqoop.export.statements.per.transaction=10
+
+The above option will define how much number of statements should be used in each transaction.
+e.g. INSERT INTO xxx VALUES (), (), (), ...
+e.g BEGIN; INSERT, INSERT, .... COMMIT
+
+9. Data Consistency staging-table
+
+a.
+In order to provide the consistent data access for the users in end database, using a staging table, Sqoop will first export all
+data into this staging table instead of the main table that is present in the parameter --table. Sqoop opens a new
+transaction to move data from the staging table to the final destination, if and only if all parallel tasks successfully transfer
+data.
+
+10.snappy compression
+
+
+
+  			^A in sqoop
+
+

@@ -1,0 +1,177 @@
+HADOOP_USER_NAME=hdfs hdfs dfs -mkdir SaiMidhun
+
+
+Host:cxln2.c.thelab-240901.internal
+Command for MYSQL in cluster:
+mysql -h cxln2.c.thelab-240901.internal -u sqoopuser -pNHkkP876rp
+
+How to merge multiple part files using HDFS :
+hdfs dfs -getmerge /user/dataflair/dir1/sample.txt /user/dataflair/dir2/sample2.txt /home/sample1.txt
+
+Sqoop command for importing the data in test table to HDFS directory Test_data
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table test -m 1 --target-dir /user/gadirajumidhun6255/SaiMidhun/Test_data
+
+After import 
+[gadirajumidhun6255@cxln4 ~]$ hadoop fs -ls /user/gadirajumidhun6255/SaiMidhun/Test_data
+Found 2 items
+-rw-r--r--   3 gadirajumidhun6255 gadirajumidhun6255          0 2019-09-25 09:27 /user/gadirajumidhun6255/SaiMidhun/Test_data/_SUCCESS
+-rw-r--r--   3 gadirajumidhun6255 gadirajumidhun6255         37 2019-09-25 09:27 /user/gadirajumidhun6255/SaiMidhun/Test_data/part-m-00000
+
+Now we can create the hive table on top of the Test_data
+create table test_tbl(id int,name string) row format delimited fields terminated by ',' location '/user/gadirajumidhun6255/SaiMidhun/Test_data'
+
+hive> select * from test_tbl;
+OK
+1       Gaurav
+2       null
+3       Shipra
+NULL    Vishal
+Time taken: 0.387 seconds, Fetched: 4 row(s)
+hive> 
+
+Serialized formats 
+RC
+ORC
+AVRO
+Parquet
+
+Sqoop import into AVRO 
+sqoop import -Dmapreduce.job.user.classpath.first=true --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table customer_Midhun -m 1 --compress --compression-codec org.apache.hadoop.io.compress.SnappyCodec --target-dir /user/gadirajumidhun6255/SaiMidhun/Project_Import --as-avrodatafile
+
+How to remove the directory in hadoop
+hadoop fs -rm -R /user/gadirajumidhun6255/SaiMidhun/Greens3
+
+Warehouse Directory :
+[gadirajumidhun6255@cxln4 ~]$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table test -m 1 --warehouse-dir /user/gadirajumidhun6255/SaiMidhun/Test_Warehous
+e
+
+[gadirajumidhun6255@cxln4 ~]$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table greens_bigData -m 1 --warehouse-dir /user/gadirajumidhun6255/SaiMidhun/Tes
+t_Warehouse
+
+[gadirajumidhun6255@cxln4 ~]$ hadoop fs -ls /user/gadirajumidhun6255/SaiMidhun/Test_Warehouse/
+Found 2 items
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2019-09-25 10:41 /user/gadirajumidhun6255/SaiMidhun/Test_Warehouse/greens_bigData
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2019-09-25 10:41 /user/gadirajumidhun6255/SaiMidhun/Test_Warehouse/test
+
+Incremental Import :
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table greens_bigData -m 1 --target-dir /user/gadirajumidhun6255/SaiMidhun/inimport --incremental append --check-column id --last-value 0
+
+the above will import records from 1 to 4
+
+sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table greens_bigData -m 1 --target-dir /user/gadirajumidhun6255/SaiMidhun/inimpo
+rt --incremental append --check-column id --last-value 4
+
+the above will import records from 5 to 7
+
+now if we create hive table on top of it we can get all the records into single table.
+
+create table incre_table(id int,name string,location string) row format delimited fields terminated by ',' location '/user/gadirajumidhun6255/SaiMidhun/inimport';
+
+
+now today we have got the 1 lakh records, next day we have got the 50000 records so we need to keep on checking the last value , hence we need to automate it ...
+which we will called as sqoop job ...
+
+how to create the Sqoop job ...
+
+sqoop job --create Greensjob -- import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table greens_bigData -m 1 --target-dir /user/gadirajumidhun6255/SaiMidhun/SqoopJobs --incremental append --check-column id --last-value 0
+
+sqoop job --exec Greensjob
+
+---------------------------------------------
+
+
+
+[gadirajumidhun6255@cxln4 ~]$ hdfs dfsadmin -report
+Configured Capacity: 1261590087680 (1.15 TB)
+Present Capacity: 1067835832416 (994.50 GB)
+DFS Remaining: 577218845928 (537.58 GB)
+DFS Used: 490616986488 (456.92 GB)
+DFS Used%: 45.94%
+Under replicated blocks: 910
+Blocks with corrupt replicas: 0
+Missing blocks: 0
+Missing blocks (with replication factor 1): 102
+
+
+
+gadirajumidhunHADOOP_USER_NAME=hdfs hdfs dfsadmin -report
+Configured Capacity: 1261590087680 (1.15 TB)
+Present Capacity: 1067576260221 (994.26 GB)
+DFS Remaining: 576806916444 (537.19 GB)
+DFS Used: 490769343777 (457.06 GB)
+DFS Used%: 45.97%
+Under replicated blocks: 910
+Blocks with corrupt replicas: 0
+Missing blocks: 0
+Missing blocks (with replication factor 1): 102
+
+-------------------------------------------------
+Live datanodes (4):
+
+Name: 10.142.1.4:50010 (cxln4.c.thelab-240901.internal)
+Hostname: cxln4.c.thelab-240901.internal
+Decommission Status : Normal
+Configured Capacity: 315397521920 (293.74 GB)
+DFS Used: 120724124220 (112.43 GB)
+Non DFS Used: 100653916100 (93.74 GB)
+DFS Remaining: 93103357995 (86.71 GB)
+DFS Used%: 38.28%
+DFS Remaining%: 29.52%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 16
+Last contact: Wed Sep 25 16:25:32 UTC 2019
+
+
+Name: 10.142.1.2:50010 (cxln2.c.thelab-240901.internal)
+Hostname: cxln2.c.thelab-240901.internal
+Decommission Status : Normal
+Configured Capacity: 315397521920 (293.74 GB)
+DFS Used: 125040464613 (116.45 GB)
+Non DFS Used: 39507418907 (36.79 GB)
+DFS Remaining: 149799045892 (139.51 GB)
+DFS Used%: 39.65%
+DFS Remaining%: 47.50%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 18
+Last contact: Wed Sep 25 16:25:33 UTC 2019
+Name: 10.142.1.1:50010 (cxln1.c.thelab-240901.internal)
+Hostname: cxln1.c.thelab-240901.internal
+Decommission Status : Normal
+Configured Capacity: 315397521920 (293.74 GB)
+DFS Used: 124807458816 (116.24 GB)
+Non DFS Used: 29974671872 (27.92 GB)
+DFS Remaining: 159698750588 (148.73 GB)
+DFS Used%: 39.57%
+DFS Remaining%: 50.63%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 16
+Last contact: Wed Sep 25 16:25:33 UTC 2019
+Name: 10.142.1.3:50010 (cxln3.c.thelab-240901.internal)
+Hostname: cxln3.c.thelab-240901.internal
+Decommission Status : Normal
+Configured Capacity: 315397521920 (293.74 GB)
+DFS Used: 120197296128 (111.94 GB)
+Non DFS Used: 19921441280 (18.55 GB)
+DFS Remaining: 174205761969 (162.24 GB)
+DFS Used%: 38.11%
+DFS Remaining%: 55.23%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 18
+Last contact: Wed Sep 25 16:25:34 UTC 2019
+

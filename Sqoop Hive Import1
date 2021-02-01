@@ -1,0 +1,88 @@
+-bash-4.2$ sqoop import --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp -table emp --hive-import --hive-database lokesh_db --hive-table sqooop_hive --num-mappers 2
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.6.2.0-205/accumulo/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+21/01/26 11:04:16 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6.2.6.2.0-205
+21/01/26 11:04:16 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+21/01/26 11:04:16 INFO tool.BaseSqoopTool: Using Hive-specific delimiters for output. You can override
+21/01/26 11:04:16 INFO tool.BaseSqoopTool: delimiters with --fields-terminated-by, etc.
+21/01/26 11:04:16 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+21/01/26 11:04:16 INFO tool.CodeGenTool: Beginning code generation
+21/01/26 11:04:16 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `emp` AS t LIMIT 1
+21/01/26 11:04:16 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `emp` AS t LIMIT 1
+21/01/26 11:04:16 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/hdp/2.6.2.0-205/hadoop-mapreduce
+Note: /tmp/sqoop-gadirajumidhun6255/compile/ba6bd66c88c306d30cf2ba72bff64460/emp.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+21/01/26 11:04:18 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-gadirajumidhun6255/compile/ba6bd66c88c306d30cf2ba72bff64460/emp.jar
+21/01/26 11:04:18 WARN manager.MySQLManager: It looks like you are importing from mysql.
+21/01/26 11:04:18 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+21/01/26 11:04:18 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+21/01/26 11:04:18 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+21/01/26 11:04:18 INFO mapreduce.ImportJobBase: Beginning import of emp
+21/01/26 11:04:19 INFO client.RMProxy: Connecting to ResourceManager at cxln2.c.thelab-240901.internal/10.142.1.2:8050
+21/01/26 11:04:19 INFO client.AHSProxy: Connecting to Application History server at cxln2.c.thelab-240901.internal/10.142.1.2:10200
+21/01/26 11:04:22 INFO db.DBInputFormat: Using read commited transaction isolation
+21/01/26 11:04:22 INFO db.DataDrivenDBInputFormat: BoundingValsQuery: SELECT MIN(`empid`), MAX(`empid`) FROM `emp`
+21/01/26 11:04:22 INFO db.IntegerSplitter: Split size: 9; Num splits: 2 from: 1 to: 19
+
+Time taken: 0.318 seconds, Fetched: 23 row(s)
+hive> select * from sqooop_hive;
+OK
+1       Beck    Dot     2       2014-09-10 00:00:00.0   2500    1       null
+2       Jack    Den     2       2017-10-28 00:00:00.0   2400    3       null
+3       Emil    Bon     3       2018-01-20 00:00:00.0   2100    1       null
+4       Siera   Leck    3       2014-02-17 00:00:00.0   2000    4       null
+5       Koe     Hoker   3       2016-03-16 00:00:00.0   2900    4       null
+6       Kate    Huds    4       2017-11-22 00:00:00.0   2500    3       null
+7       Rene    Swaz    4       2017-09-19 00:00:00.0   2450    3       null
+8       Zack    Night   4       2013-05-15 00:00:00.0   2800    3       null
+9       Beck    Decker  4       2015-06-23 00:00:00.0   2350    3       null
+10      Bruno   Mars    2       1985-10-08 00:00:00.0   2350    1       null
+11      Kale    Hacker  2       1984-12-17 00:00:00.0   2800    1       null
+12      Colt    Speed   4       1987-11-18 00:00:00.0   2800    2       null
+13      Etal    Femme   1       1985-01-01 00:00:00.0   2425    2       null
+14      Mont    Blanc   1       1987-05-01 00:00:00.0   2425    2       null
+15      Iron    Man     4       1984-12-17 00:00:00.0   2800    3       null
+16      Spider  Man     2       2015-06-23 00:00:00.0   2350    3       null
+17      Captain America 2       2014-02-17 00:00:00.0   2000    1       null
+18      Super   Hulk    1       2014-02-17 00:00:00.0   2000    2       null
+19      Cat     Woman   2       2016-05-22 00:00:00.0   2375    3       null
+Time taken: 0.447 seconds, Fetched: 19 row(s)
+hive> 
+
+-----------------------------------------
+Import All tables:
+
+-bash-4.2$ sqoop import-all-tables --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --warehouse-dir /user/
+gadirajumidhun6255/batch5_Sqoop_importAll --autoreset-to-one-mapper
+Output:
+-bash-4.2$ hadoop dfs -ls /user/gadirajumidhun6255/midhun_all_imp/
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+Found 19 items
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:01 /user/gadirajumidhun6255/midhun_all_imp/categories
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:01 /user/gadirajumidhun6255/midhun_all_imp/col_evolution
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:02 /user/gadirajumidhun6255/midhun_all_imp/col_evolution_avro
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:02 /user/gadirajumidhun6255/midhun_all_imp/customer_Midhun
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:02 /user/gadirajumidhun6255/midhun_all_imp/customers
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:03 /user/gadirajumidhun6255/midhun_all_imp/depart
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:03 /user/gadirajumidhun6255/midhun_all_imp/departj
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:03 /user/gadirajumidhun6255/midhun_all_imp/departments
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:03 /user/gadirajumidhun6255/midhun_all_imp/departt
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:04 /user/gadirajumidhun6255/midhun_all_imp/deptt
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:04 /user/gadirajumidhun6255/midhun_all_imp/emp
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:04 /user/gadirajumidhun6255/midhun_all_imp/employees
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:05 /user/gadirajumidhun6255/midhun_all_imp/incre_lm
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:05 /user/gadirajumidhun6255/midhun_all_imp/order_items
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:05 /user/gadirajumidhun6255/midhun_all_imp/orders
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:06 /user/gadirajumidhun6255/midhun_all_imp/products
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:06 /user/gadirajumidhun6255/midhun_all_imp/t_cust
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:06 /user/gadirajumidhun6255/midhun_all_imp/t_test
+drwxr-xr-x   - gadirajumidhun6255 gadirajumidhun6255          0 2021-01-27 02:07 /user/gadirajumidhun6255/midhun_all_imp/txnrecords_src
+
+Sqoop Import All Tables Exclude tables:
+
+-bash-4.2$ sqoop import-all-tables --connect jdbc:mysql://cxln2.c.thelab-240901.internal/retail_db -username sqoopuser --password NHkkP876rp --warehouse-dir /user/gadirajumidhun6255/midhun_all_exclude --exclude-tables categories,col_evolution  --autoreset-to-one-mapper
+
