@@ -1,0 +1,410 @@
+Distcp command :
+
+[gadirajumidhun6255@cxln4 ~]$ hadoop distcp hdfs://cxln1.c.thelab-240901.internal:8020//user/gadirajumidhun6255/FileFormat_examples/txn_updated.txt hdfs://cxln1.c.thelab-240901.internal:8020//user/achievesai8637/SaiMidhun/file_for
+mat_example_files/
+
+---------------------------------------------------------------------
+
+
+
+hive> use hive_partitions;
+OK
+Time taken: 2.019 seconds
+hive> show tables;
+OK
+Time taken: 0.3 seconds
+hive> create  table txnrecords(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) row format delimited fields terminated by ',' lines terminated by '\n'
+ stored as textfile;
+OK
+Time taken: 0.202 seconds
+hive> load data local inpath '/home/gadirajumidhun6255/SaiMidhun_local/txn_updated.txt' into table txnrecords;
+Loading data to table hive_partitions.txnrecords
+Table hive_partitions.txnrecords stats: [numFiles=1, numRows=0, totalSize=88998, rawDataSize=0]
+OK
+Time taken: 1.0 seconds
+hive> select * from txnrecords limit 10;
+OK
+0       06-26-2011      4007024 40.33   Exercise & Fitness      Cardio Machine Accessories      Clarksville     Tennessee       credit
+1       05-26-2011      4006742 198.44  Exercise & Fitness      Weightlifting Gloves    Long Beach      California      credit
+2       06-01-2011      4009775 5.58    Exercise & Fitness      Weightlifting Machine Accessories       Anaheim California      credit
+3       06-05-2011      4002199 198.19  Gymnastics      Gymnastics Rings        Milwaukee       Wisconsin       credit
+4       12-17-2011      4002613 98.81   Team Sports     Field Hockey    Nashville       Tennessee       credit
+5       02-14-2011      4007591 193.63  Outdoor Recreation      Camping & Backpacking & Hiking  Chicago Illinois        credit
+6       10-28-2011      4002190 27.89   Puzzles Jigsaw Puzzles  Charleston      South Carolina  credit
+7       07-14-2011      4002964 96.01   Outdoor Play Equipment  Sandboxes       Columbus        Ohio    credit
+8       01-17-2011      4007361 10.44   Winter Sports   Snowmobiling    Des Moines      Iowa    credit
+9       05-17-2011      4004798 152.46  Jumping Bungee Jumping  St. Petersburg  Florida credit
+Time taken: 0.343 seconds, Fetched: 10 row(s)
+------------------------------------------------------------------------------------------------------------------------------
+hive> create  table txnrecords1(txnno INT, txndate STRING, custno INT, amount DOUBLE,product STRING, city STRING, state STRING, spendby STRING) partitioned by (category string) row format delimited fields terminated by ',' lines t
+erminated by '\n' stored as textfile;
+OK
+Time taken: 0.197 seconds
+
+
+
+-------------------------------------------------------------------------------------------------------
+
+Insert into table txnrecords1 partition (category) select txnno,txndate,custno,amount, product,city,state,spendby,category from txnrecords;
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+
+Query ID = gadirajumidhun6255_20200309093757_77f6c279-a0f1-4441-a5cf-31e72b9929aa
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1582215230149_4483, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_4483/
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job  -kill job_1582215230149_4483
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2020-03-09 09:38:05,889 Stage-1 map = 0%,  reduce = 0%
+2020-03-09 09:38:11,250 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.78 sec
+MapReduce Total cumulative CPU time: 3 seconds 780 msec
+Ended Job = job_1582215230149_4483
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://cxln1.c.thelab-240901.internal:8020/apps/hive/warehouse/hive_partitions.db/txnrecords1/.hive-staging_hive_2020-03-09_09-37-57_368_8129392375878767751-1/-ext-10000
+Loading data to table hive_partitions.txnrecords1 partition (category=null)
+         Time taken to load dynamic partitions: 3.959 seconds
+        Loading partition {category=Winter Sports}
+        Loading partition {category=Racquet Sports}
+        Loading partition {category=Jumping}
+        Loading partition {category=Exercise & Fitness}
+        Loading partition {category=Gymnastics}
+        Loading partition {category=Dancing}
+        Loading partition {category=Water Sports}
+        Loading partition {category=Combat Sports}
+        Loading partition {category=Games}
+        Loading partition {category=Puzzles}
+        Loading partition {category=Air Sports}
+        Loading partition {category=Outdoor Recreation}
+        Loading partition {category=Indoor Games}
+        Loading partition {category=Outdoor Play Equipment}
+        Loading partition {category=Team Sports}
+         Time taken for adding to write entity : 3
+Partition hive_partitions.txnrecords1{category=Air Sports} stats: [numFiles=1, numRows=26, totalSize=1688, rawDataSize=1662]
+Partition hive_partitions.txnrecords1{category=Combat Sports} stats: [numFiles=1, numRows=43, totalSize=2787, rawDataSize=2744]
+Partition hive_partitions.txnrecords1{category=Dancing} stats: [numFiles=1, numRows=14, totalSize=939, rawDataSize=925]
+Partition hive_partitions.txnrecords1{category=Exercise & Fitness} stats: [numFiles=1, numRows=129, totalSize=9412, rawDataSize=9283]
+Partition hive_partitions.txnrecords1{category=Games} stats: [numFiles=1, numRows=65, totalSize=4439, rawDataSize=4374]
+Partition hive_partitions.txnrecords1{category=Gymnastics} stats: [numFiles=1, numRows=73, totalSize=5238, rawDataSize=5165]
+Partition hive_partitions.txnrecords1{category=Indoor Games} stats: [numFiles=1, numRows=64, totalSize=4158, rawDataSize=4094]
+Partition hive_partitions.txnrecords1{category=Jumping} stats: [numFiles=1, numRows=48, totalSize=3356, rawDataSize=3308]
+Partition hive_partitions.txnrecords1{category=Outdoor Play Equipment} stats: [numFiles=1, numRows=57, totalSize=3810, rawDataSize=3753]
+Partition hive_partitions.txnrecords1{category=Outdoor Recreation} stats: [numFiles=1, numRows=140, totalSize=9393, rawDataSize=9253]
+Partition hive_partitions.txnrecords1{category=Puzzles} stats: [numFiles=1, numRows=12, totalSize=870, rawDataSize=858]
+Partition hive_partitions.txnrecords1{category=Racquet Sports} stats: [numFiles=1, numRows=34, totalSize=2158, rawDataSize=2124]
+Partition hive_partitions.txnrecords1{category=Team Sports} stats: [numFiles=1, numRows=124, totalSize=8043, rawDataSize=7919]
+Partition hive_partitions.txnrecords1{category=Water Sports} stats: [numFiles=1, numRows=112, totalSize=7720, rawDataSize=7608]
+Partition hive_partitions.txnrecords1{category=Winter Sports} stats: [numFiles=1, numRows=59, totalSize=4032, rawDataSize=3973]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 3.78 sec   HDFS Read: 94898 HDFS Write: 69131 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 780 msec
+OK
+Time taken: 21.749 seconds
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+static partition 
+
+hive> create  table txnrecords_SP(txnno INT, txndate STRING, custno INT, amount DOUBLE,product STRING, city STRING, state STRING, spendby STRING) partitioned by (category string) row format delimited fields terminated by ',' lines
+ terminated by '\n' stored as textfile;
+OK
+Time taken: 0.226 seconds
+
+
+hive> load data local inpath '/home/gadirajumidhun6255/SaiMidhun_local/txn_updated.txt' OVERWRITE INTO TABLE txnrecords_SP partition(category ='Fitness');
+
+Loading data to table hive_partitions.txnrecords_sp partition (category=Fitness)
+Partition hive_partitions.txnrecords_sp{category=Fitness} stats: [numFiles=1, numRows=0, totalSize=88998, rawDataSize=0]
+OK
+Time taken: 1.573 seconds
+
+hive> load data local inpath '/home/gadirajumidhun6255/SaiMidhun_local/txn_updated.txt' OVERWRITE INTO TABLE txnrecords_SP partition(category ='Exercise');
+Loading data to table hive_partitions.txnrecords_sp partition (category=Exercise)
+Partition hive_partitions.txnrecords_sp{category=Exercise} stats: [numFiles=1, numRows=0, totalSize=88998, rawDataSize=0]
+OK
+Time taken: 1.552 seconds
+
+now go to document and see that ...
+
+
+-----------------------------------------------
+
+Static with Insert :
+
+hive> create  table txnrecords_SP_Insert(txnno INT, txndate STRING, custno INT, amount DOUBLE,product STRING, city STRING, state STRING, spendby STRING) partitioned by (category string) row format delimited fields terminated by ',
+' lines terminated by '\n' stored as textfile;
+OK
+Time taken: 0.162 seconds
+
+hive> Insert into table txnrecords_SP_Insert partition (category='Games') select txnno,txndate,custno,amount,product,city,state,spendby from txnrecords where category='Games';
+
+
+Query ID = gadirajumidhun6255_20200309114514_b43a773e-7376-44d8-8c8f-5f8001044eec
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1582215230149_4492, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_4492/
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job  -kill job_1582215230149_4492
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2020-03-09 11:45:22,636 Stage-1 map = 0%,  reduce = 0%
+2020-03-09 11:45:28,891 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.68 sec
+MapReduce Total cumulative CPU time: 3 seconds 680 msec
+Ended Job = job_1582215230149_4492
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://cxln1.c.thelab-240901.internal:8020/apps/hive/warehouse/hive_partitions.db/txnrecords_sp_insert/category=Games/.hive-staging_hive_2020-03-09_11-45-14_875_2453660800571970764-1/-ext-10000
+Loading data to table hive_partitions.txnrecords_sp_insert partition (category=Games)
+Partition hive_partitions.txnrecords_sp_insert{category=Games} stats: [numFiles=1, numRows=65, totalSize=4439, rawDataSize=4374]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 3.68 sec   HDFS Read: 95233 HDFS Write: 4548 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 680 msec
+OK
+Time taken: 16.115 seconds
+
+Time taken: 16.115 seconds
+hive> select * from txnrecords_SP_Insert;
+OK
+27      09-29-2011      4005211 66.4    Mahjong Fremont California      credit  Games
+31      11-28-2011      4002130 5.03    Dice & Dice Sets        Los Angeles     California      credit  Games
+35      04-12-2011      4006967 185.26  Board Games     Centennial      Colorado        credit  Games
+67      10-10-2011      4002526 159.14  Poker Chips & Sets      Las Vegas       Nevada  credit  Games
+74      10-27-2011      4002106 148.31  Portable Electronic Games       Pasadena        California      credit  Games
+98      09-04-2011      4002707 5.95    Dominoes        Lincoln Nebraska        cash    Games
+104     03-02-2011      4001237 41.74   Portable Electronic Games       Irving  Texas   credit  Games
+107     01-01-2011      4006017 177.45  Dice & Dice Sets        Orange  California      credit  Games
+108     03-20-2011      4007549 78.02   Dice Games      Saint Paul      Minnesota       credit  Games
+128     01-30-2011      4002026 74.78   Mahjong Madison Wisconsin       credit  Games
+129     06-22-2011      4005673 24.23   Card Games      Plano   Texas   credit  Games
+131     05-25-2011      4001353 138.88  Card Games      San Antonio     Texas   credit  Games
+145     03-30-2011      4007690 69.71   Bingo Sets      Buffalo New York        credit  Games
+162     12-16-2011      4004439 50.81   Portable Electronic Games       Orlando Florida credit  Games
+185     02-04-2011      4002196 73.37   Dice Games      Newark  New Jersey      credit  Games
+199     01-30-2011      4003263 39.84   Bingo Sets      Long Beach      California      cash    Games
+203     11-12-2011      4005629 70.82   Poker Chips & Sets      Santa Ana       California      credit  Games
+227     08-28-2011      4002842 136.06  Bingo Sets      Los Angeles     California      credit  Games
+240     03-12-2011      4006399 124.26  Dice Games      San Francisco   California      credit  Games
+245     12-19-2011      4006533 44.87   Portable Electronic Games       Sunnyvale       California      cash    Games
+252     01-24-2011      4003825 85.56   Card Games      Springfield     Illinois        credit  Games
+255     03-16-2011      4006383 189.42  Board Games     Alexandria      Virginia        credit  Games
+256     08-30-2011      4002092 179.82  Board Games     Centennial      Colorado        credit  Games
+284     10-30-2011      4003340 114.32  Bingo Sets      Colorado Springs        Colorado        credit  Games
+
+hive> Insert into table txnrecords_SP_Insert partition (category='Gymnastics') select txnno,txndate,custno,amount,product,city,state,spendby from txnrecords where category='Gymnastics';
+Query ID = gadirajumidhun6255_20200309115357_3f355c10-0a09-4f1c-ae82-5c3b3815e7a5
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1582215230149_4494, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_4494/
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job  -kill job_1582215230149_4494
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2020-03-09 11:54:05,588 Stage-1 map = 0%,  reduce = 0%
+2020-03-09 11:54:11,876 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.75 sec
+MapReduce Total cumulative CPU time: 3 seconds 750 msec
+Ended Job = job_1582215230149_4494
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://cxln1.c.thelab-240901.internal:8020/apps/hive/warehouse/hive_partitions.db/txnrecords_sp_insert/category=Gymnastics/.hive-staging_hive_2020-03-09_11-53-57_756_1665063175209268857-1/-ext-10000
+Loading data to table hive_partitions.txnrecords_sp_insert partition (category=Gymnastics)
+Partition hive_partitions.txnrecords_sp_insert{category=Gymnastics} stats: [numFiles=1, numRows=73, totalSize=5238, rawDataSize=5165]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 3.75 sec   HDFS Read: 95269 HDFS Write: 5352 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 750 msec
+OK
+Time taken: 17.304 seconds
+---------------------------------------------------------------------------------------------
+create  table txnrecords_DP(txnno INT, txndate STRING, custno INT, amount DOUBLE,product STRING, city STRING, state STRING, spendby STRING) partitioned by (category string) row format delimited fields terminated by ',' lines
+ terminated by '\n' stored as textfile;
+OK
+Time taken: 0.227 seconds
+
+hive> insert into txnrecords_DP partition(category) select txnno,txndate,custno,amount,product,city,state,spendby,category from txnrecords;
+Query ID = gadirajumidhun6255_20200309122842_6794497a-5abf-499a-9dfd-1d55c745c49e
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1582215230149_4498, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_4498/
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job  -kill job_1582215230149_4498
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2020-03-09 12:28:50,727 Stage-1 map = 0%,  reduce = 0%
+2020-03-09 12:28:57,097 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.71 sec
+MapReduce Total cumulative CPU time: 3 seconds 710 msec
+Ended Job = job_1582215230149_4498
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://cxln1.c.thelab-240901.internal:8020/apps/hive/warehouse/hive_partitions.db/txnrecords_dp/.hive-staging_hive_2020-03-09_12-28-42_029_4313584387693110527-1/-ext-10000
+Loading data to table hive_partitions.txnrecords_dp partition (category=null)
+         Time taken to load dynamic partitions: 3.865 seconds
+        Loading partition {category=Combat Sports}
+        Loading partition {category=Team Sports}
+        Loading partition {category=Outdoor Play Equipment}
+        Loading partition {category=Dancing}
+        Loading partition {category=Air Sports}
+        Loading partition {category=Indoor Games}
+        Loading partition {category=Outdoor Recreation}
+        Loading partition {category=Puzzles}
+        Loading partition {category=Water Sports}
+        Loading partition {category=Games}
+        Loading partition {category=Exercise & Fitness}
+        Loading partition {category=Racquet Sports}
+        Loading partition {category=Gymnastics}
+        Loading partition {category=Winter Sports}
+        Loading partition {category=Jumping}
+         Time taken for adding to write entity : 5
+Partition hive_partitions.txnrecords_dp{category=Air Sports} stats: [numFiles=1, numRows=26, totalSize=1688, rawDataSize=1662]
+Partition hive_partitions.txnrecords_dp{category=Combat Sports} stats: [numFiles=1, numRows=43, totalSize=2787, rawDataSize=2744]
+Partition hive_partitions.txnrecords_dp{category=Dancing} stats: [numFiles=1, numRows=14, totalSize=939, rawDataSize=925]
+Partition hive_partitions.txnrecords_dp{category=Exercise & Fitness} stats: [numFiles=1, numRows=129, totalSize=9412, rawDataSize=9283]
+Partition hive_partitions.txnrecords_dp{category=Games} stats: [numFiles=1, numRows=65, totalSize=4439, rawDataSize=4374]
+Partition hive_partitions.txnrecords_dp{category=Gymnastics} stats: [numFiles=1, numRows=73, totalSize=5238, rawDataSize=5165]
+Partition hive_partitions.txnrecords_dp{category=Indoor Games} stats: [numFiles=1, numRows=64, totalSize=4158, rawDataSize=4094]
+Partition hive_partitions.txnrecords_dp{category=Jumping} stats: [numFiles=1, numRows=48, totalSize=3356, rawDataSize=3308]
+Partition hive_partitions.txnrecords_dp{category=Outdoor Play Equipment} stats: [numFiles=1, numRows=57, totalSize=3810, rawDataSize=3753]
+Partition hive_partitions.txnrecords_dp{category=Outdoor Recreation} stats: [numFiles=1, numRows=140, totalSize=9393, rawDataSize=9253]
+Partition hive_partitions.txnrecords_dp{category=Puzzles} stats: [numFiles=1, numRows=12, totalSize=870, rawDataSize=858]
+Partition hive_partitions.txnrecords_dp{category=Racquet Sports} stats: [numFiles=1, numRows=34, totalSize=2158, rawDataSize=2124]
+Partition hive_partitions.txnrecords_dp{category=Team Sports} stats: [numFiles=1, numRows=124, totalSize=8043, rawDataSize=7919]
+Partition hive_partitions.txnrecords_dp{category=Water Sports} stats: [numFiles=1, numRows=112, totalSize=7720, rawDataSize=7608]
+Partition hive_partitions.txnrecords_dp{category=Winter Sports} stats: [numFiles=1, numRows=59, totalSize=4032, rawDataSize=3973]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 3.71 sec   HDFS Read: 94914 HDFS Write: 69161 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 710 msec
+OK
+Time taken: 22.798 seconds
+hive> 
+
+
+---------------------------------
+
+hive> insert into txnrecords_DP partition(category) select txnno,txndate,custno,amount,product,city,state,category,spendby from txnrecords;
+Query ID = gadirajumidhun6255_20200309124044_858ec232-e595-4222-bdd6-b2ffa9dba213
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1582215230149_4500, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_4500/
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job  -kill job_1582215230149_4500
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2020-03-09 12:40:52,087 Stage-1 map = 0%,  reduce = 0%
+2020-03-09 12:40:57,368 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.21 sec
+MapReduce Total cumulative CPU time: 3 seconds 210 msec
+Ended Job = job_1582215230149_4500
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://cxln1.c.thelab-240901.internal:8020/apps/hive/warehouse/hive_partitions.db/txnrecords_dp/.hive-staging_hive_2020-03-09_12-40-44_557_5846164879753215751-1/-ext-10000
+Loading data to table hive_partitions.txnrecords_dp partition (category=null)
+         Time taken to load dynamic partitions: 0.622 seconds
+        Loading partition {category=cash}
+        Loading partition {category=credit}
+         Time taken for adding to write entity : 0
+Partition hive_partitions.txnrecords_dp{category=cash} stats: [numFiles=1, numRows=139, totalSize=10321, rawDataSize=10182]
+Partition hive_partitions.txnrecords_dp{category=credit} stats: [numFiles=1, numRows=861, totalSize=65207, rawDataSize=64346]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 3.21 sec   HDFS Read: 94941 HDFS Write: 75699 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 210 msec
+OK
+Time taken: 15.195 seconds
+hive> 
+
+
+----------------------------------------------------------------------------------------------
+
+sub -partitions :
+
+create  table txnrecords1(txnno INT, txndate STRING, custno INT, amount DOUBLE,product STRING, city STRING, state STRING) partitioned by (category string,spendby string) row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile;
+
+hive> Insert into table txn_subpartition  partition (category,spendby) select txnno,txndate,custno,amount, product,state,city,category,spendby from txnrecords;
+FAILED: SemanticException [Error 10096]: Dynamic partition strict mode requires at least one static partition column. To turn this off set hive.exec.dynamic.partition.mode=nonstrict
+hive> set hive.exec.dynamic.partition.mode=nonstrict;
+hive> Insert into table txn_subpartition  partition (category,spendby) select txnno,txndate,custno,amount, product,state,city,category,spendby from txnrecords;
+Query ID = gadirajumidhun6255_20200309151813_557e460c-a523-4ee6-8164-c78a36e0d88e
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1582215230149_4528, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_4528/
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job  -kill job_1582215230149_4528
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2020-03-09 15:18:22,175 Stage-1 map = 0%,  reduce = 0%
+2020-03-09 15:18:28,500 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.64 sec
+MapReduce Total cumulative CPU time: 2 seconds 640 msec
+Ended Job = job_1582215230149_4528
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://cxln1.c.thelab-240901.internal:8020/apps/hive/warehouse/hive_partitions.db/txn_subpartition/.hive-staging_hive_2020-03-09_15-18-13_214_8710402217237358615-1/-ext-10000
+Loading data to table hive_partitions.txn_subpartition partition (category=null, spendby=null)
+         Time taken to load dynamic partitions: 7.447 seconds
+        Loading partition {category=Games, spendby=cash}
+        Loading partition {category=Outdoor Recreation, spendby=cash}
+        Loading partition {category=Water Sports, spendby=cash}
+        Loading partition {category=Air Sports, spendby=credit}
+        Loading partition {category=Exercise & Fitness, spendby=credit}
+        Loading partition {category=Outdoor Recreation, spendby=credit}
+        Loading partition {category=Team Sports, spendby=credit}
+        Loading partition {category=Dancing, spendby=cash}
+        Loading partition {category=Team Sports, spendby=cash}
+        Loading partition {category=Puzzles, spendby=credit}
+        Loading partition {category=Air Sports, spendby=cash}
+        Loading partition {category=Exercise & Fitness, spendby=cash}
+        Loading partition {category=Indoor Games, spendby=credit}
+        Loading partition {category=Outdoor Play Equipment, spendby=credit}
+        Loading partition {category=Combat Sports, spendby=credit}
+        Loading partition {category=Jumping, spendby=cash}
+        Loading partition {category=Puzzles, spendby=cash}
+        Loading partition {category=Games, spendby=credit}
+        Loading partition {category=Gymnastics, spendby=credit}
+        Loading partition {category=Water Sports, spendby=credit}
+        Loading partition {category=Gymnastics, spendby=cash}
+        Loading partition {category=Dancing, spendby=credit}
+        Loading partition {category=Indoor Games, spendby=cash}
+        Loading partition {category=Outdoor Play Equipment, spendby=cash}
+        Loading partition {category=Racquet Sports, spendby=credit}
+        Loading partition {category=Winter Sports, spendby=credit}
+        Loading partition {category=Winter Sports, spendby=cash}
+        Loading partition {category=Jumping, spendby=credit}
+        Loading partition {category=Racquet Sports, spendby=cash}
+        Loading partition {category=Combat Sports, spendby=cash}
+         Time taken for adding to write entity : 6
+Partition hive_partitions.txn_subpartition{category=Air Sports, spendby=cash} stats: [numFiles=1, numRows=3, totalSize=186, rawDataSize=183]
+Partition hive_partitions.txn_subpartition{category=Air Sports, spendby=credit} stats: [numFiles=1, numRows=23, totalSize=1326, rawDataSize=1303]
+Partition hive_partitions.txn_subpartition{category=Combat Sports, spendby=cash} stats: [numFiles=1, numRows=4, totalSize=236, rawDataSize=232]
+Partition hive_partitions.txn_subpartition{category=Combat Sports, spendby=credit} stats: [numFiles=1, numRows=39, totalSize=2258, rawDataSize=2219]
+Partition hive_partitions.txn_subpartition{category=Dancing, spendby=cash} stats: [numFiles=1, numRows=1, totalSize=60, rawDataSize=59]
+Partition hive_partitions.txn_subpartition{category=Dancing, spendby=credit} stats: [numFiles=1, numRows=13, totalSize=783, rawDataSize=770]
+Partition hive_partitions.txn_subpartition{category=Exercise & Fitness, spendby=cash} stats: [numFiles=1, numRows=10, totalSize=668, rawDataSize=658]
+Partition hive_partitions.txn_subpartition{category=Exercise & Fitness, spendby=credit} stats: [numFiles=1, numRows=119, totalSize=7861, rawDataSize=7742]
+Partition hive_partitions.txn_subpartition{category=Games, spendby=cash} stats: [numFiles=1, numRows=7, totalSize=415, rawDataSize=408]
+Partition hive_partitions.txn_subpartition{category=Games, spendby=credit} stats: [numFiles=1, numRows=58, totalSize=3583, rawDataSize=3525]
+Partition hive_partitions.txn_subpartition{category=Gymnastics, spendby=cash} stats: [numFiles=1, numRows=14, totalSize=865, rawDataSize=851]
+Partition hive_partitions.txn_subpartition{category=Gymnastics, spendby=credit} stats: [numFiles=1, numRows=59, totalSize=3890, rawDataSize=3831]
+Partition hive_partitions.txn_subpartition{category=Indoor Games, spendby=cash} stats: [numFiles=1, numRows=11, totalSize=614, rawDataSize=603]
+Partition hive_partitions.txn_subpartition{category=Indoor Games, spendby=credit} stats: [numFiles=1, numRows=53, totalSize=3118, rawDataSize=3065]
+Partition hive_partitions.txn_subpartition{category=Jumping, spendby=cash} stats: [numFiles=1, numRows=6, totalSize=382, rawDataSize=376]
+Partition hive_partitions.txn_subpartition{category=Jumping, spendby=credit} stats: [numFiles=1, numRows=42, totalSize=2650, rawDataSize=2608]
+Partition hive_partitions.txn_subpartition{category=Outdoor Play Equipment, spendby=cash} stats: [numFiles=1, numRows=9, totalSize=552, rawDataSize=543]
+Partition hive_partitions.txn_subpartition{category=Outdoor Play Equipment, spendby=credit} stats: [numFiles=1, numRows=48, totalSize=2877, rawDataSize=2829]
+Partition hive_partitions.txn_subpartition{category=Outdoor Recreation, spendby=cash} stats: [numFiles=1, numRows=24, totalSize=1385, rawDataSize=1361]
+Partition hive_partitions.txn_subpartition{category=Outdoor Recreation, spendby=credit} stats: [numFiles=1, numRows=116, totalSize=7076, rawDataSize=6960]
+Partition hive_partitions.txn_subpartition{category=Puzzles, spendby=cash} stats: [numFiles=1, numRows=2, totalSize=130, rawDataSize=128]
+Partition hive_partitions.txn_subpartition{category=Puzzles, spendby=credit} stats: [numFiles=1, numRows=10, totalSize=660, rawDataSize=650]
+Partition hive_partitions.txn_subpartition{category=Racquet Sports, spendby=cash} stats: [numFiles=1, numRows=5, totalSize=258, rawDataSize=253]
+Partition hive_partitions.txn_subpartition{category=Racquet Sports, spendby=credit} stats: [numFiles=1, numRows=29, totalSize=1672, rawDataSize=1643]
+Partition hive_partitions.txn_subpartition{category=Team Sports, spendby=cash} stats: [numFiles=1, numRows=20, totalSize=1153, rawDataSize=1133]
+Partition hive_partitions.txn_subpartition{category=Team Sports, spendby=credit} stats: [numFiles=1, numRows=104, totalSize=6062, rawDataSize=5958]
+Partition hive_partitions.txn_subpartition{category=Water Sports, spendby=cash} stats: [numFiles=1, numRows=14, totalSize=873, rawDataSize=859]
+Partition hive_partitions.txn_subpartition{category=Water Sports, spendby=credit} stats: [numFiles=1, numRows=98, totalSize=6091, rawDataSize=5993]
+Partition hive_partitions.txn_subpartition{category=Winter Sports, spendby=cash} stats: [numFiles=1, numRows=9, totalSize=568, rawDataSize=559]
+Partition hive_partitions.txn_subpartition{category=Winter Sports, spendby=credit} stats: [numFiles=1, numRows=50, totalSize=3069, rawDataSize=3019]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 2.64 sec   HDFS Read: 94929 HDFS Write: 64063 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 640 msec
+OK
+Time taken: 28.791 seconds
+hive> 
+

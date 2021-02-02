@@ -1,0 +1,549 @@
+Map side Join :
+
+ 
+
+CREATE TABLE IF NOT EXISTS dataset1 ( eid int, first_name String, last_name String, email String, gender String, ip_address String) row format delimited fields terminated BY ',' tblproperties("skip.header.line.count"="1");
+
+ 
+
+CREATE TABLE IF NOT EXISTS dataset2 ( eid int, first_name String, last_name String) row format delimited fields terminated BY ',' tblproperties("skip.header.line.count"="1");
+
+------------------------------------------------------------------------------------------
+
+hive> use hive_partitions;
+
+ 
+
+OK
+
+Time taken: 1.845 seconds
+
+ 
+
+hive> CREATE TABLE IF NOT EXISTS dataset1 ( eid int, first_name String, last_name String, email String, gender String, ip_address String) row format delimited fields terminated BY ',' tblproperties("skip.header.line.count"="1");
+
+ 
+
+OK
+
+Time taken: 0.311 seconds
+
+ 
+
+hive> CREATE TABLE IF NOT EXISTS dataset2 ( eid int, first_name String, last_name String) row format delimited fields terminated BY ',' tblproperties("skip.header.line.count"="1");
+
+ 
+
+OK
+
+Time taken: 0.16 seconds
+
+ 
+
+hive> load data inpath '/user/gadirajumidhun6255/FileFormat_examples/dataset1.csv' into table dataset1;
+
+ 
+
+Loading data to table hive_partitions.dataset1
+
+Table hive_partitions.dataset1 stats: [numFiles=1, numRows=0, totalSize=60302, rawDataSize=0]
+
+OK
+
+Time taken: 0.844 seconds
+
+ 
+
+hive> select * from dataset1 limit 5;
+
+OK
+
+1 Maria Rice mrice0@dyndns.org Female 138.50.112.255
+
+2 Phyllis Perez pperez1@hud.gov Female 252.84.151.146
+
+3 Russell Carr rcarr2@163.com Male 255.54.195.66
+
+4 Gloria Smith gsmith3@youtu.be Female 147.250.174.221
+
+5 Sarah Bennett sbennett4@scientificamerican.com Female 229.246.234.33
+
+Time taken: 0.402 seconds, Fetched: 5 row(s)
+
+ 
+
+hive> select count(*) from dataset1;
+
+ 
+
+Query ID = gadirajumidhun6255_20200312080349_121548a8-125e-4add-a50b-cafac9779192
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 1
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5221, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5221/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5221
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+
+2020-03-12 08:03:58,424 Stage-1 map = 0%, reduce = 0%
+
+2020-03-12 08:04:04,757 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 2.9 sec
+
+2020-03-12 08:04:11,056 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 5.94 sec
+
+MapReduce Total cumulative CPU time: 5 seconds 940 msec
+
+Ended Job = job_1582215230149_5221
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 1 Cumulative CPU: 5.94 sec HDFS Read: 68709 HDFS Write: 5 SUCCESS
+
+Total MapReduce CPU Time Spent: 5 seconds 940 msec
+
+OK
+
+1000
+
+Time taken: 22.229 seconds, Fetched: 1 row(s)
+
+ 
+
+hive> load data inpath '/user/gadirajumidhun6255/FileFormat_examples/dataset2_csv.csv' into table dataset2;
+
+ 
+
+Loading data to table hive_partitions.dataset2
+
+Table hive_partitions.dataset2 stats: [numFiles=1, numRows=0, totalSize=18744, rawDataSize=0]
+
+OK
+
+Time taken: 0.708 seconds
+
+hive> select count(*) from dataset2;
+
+-------------------------------------------------------------------------------------
+
+hive> set hive.auto.convert.join=true;
+
+ 
+
+ 
+
+SELECT /*+ MAPJOIN(dataset2) */ dataset1.first_name, dataset1.eid,dataset2.eid FROM dataset1 JOIN dataset2 ON dataset1.first_name = dataset2.first_name;
+
+ 
+
+ 
+
+output:
+
+ 
+
+hive> SELECT /*+ MAPJOIN(dataset2) */ dataset1.first_name, dataset1.eid,dataset2.eid FROM dataset1 JOIN dataset2 ON dataset1.first_name = dataset2.first_name;
+
+Query ID = gadirajumidhun6255_20200312080956_071a4b72-50a8-4052-882c-69d7b6c3ade6
+
+Total jobs = 1
+
+Execution log at: /tmp/gadirajumidhun6255/gadirajumidhun6255_20200312080956_071a4b72-50a8-4052-882c-69d7b6c3ade6.log
+
+2020-03-12 08:10:00 Starting to launch local task to process map join; maximum memory = 523239424
+
+2020-03-12 08:10:01 Dump the side-table for tag: 1 with group count: 197 into file: file:/tmp/gadirajumidhun6255/898d9d1d-2149-4bc5-a676-daf69a8b6664/hive_2020-03-12_08-09-56_408_8491807554864277797-1/-local-10003/HashTable-St
+
+age-3/MapJoin-mapfile01--.hashtable
+
+2020-03-12 08:10:01 Uploaded 1 File to: file:/tmp/gadirajumidhun6255/898d9d1d-2149-4bc5-a676-daf69a8b6664/hive_2020-03-12_08-09-56_408_8491807554864277797-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile01--.hashtable (11826 b
+
+ytes)
+
+2020-03-12 08:10:01 End of local task; Time Taken: 1.406 sec.
+
+Execution completed successfully
+
+MapredLocal task succeeded
+
+Launching Job 1 out of 1
+
+Number of reduce tasks is set to 0 since there's no reduce operator
+
+Starting Job = job_1582215230149_5225, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5225/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5225
+
+Hadoop job information for Stage-3: number of mappers: 1; number of reducers: 0
+
+2020-03-12 08:10:11,342 Stage-3 map = 0%, reduce = 0%
+
+2020-03-12 08:10:17,640 Stage-3 map = 100%, reduce = 0%, Cumulative CPU 3.98 sec
+
+ 
+
+-------------------------------------------------------
+
+ 
+
+Bucket Map Join :
+
+ 
+
+hive> CREATE TABLE IF NOT EXISTS dataset1_bucketed ( eid int,first_name String, last_name String, email String, gender String, ip_address String) clustered by(first_name) into 4 buckets row format delimited fields terminated BY ',
+
+';
+
+OK
+
+Time taken: 0.198 seconds
+
+hive> CREATE TABLE IF NOT EXISTS dataset2_bucketed (eid int,first_name String, last_name String) clustered by(first_name) into 8 buckets row format delimited fields terminated BY ',' ;
+
+OK
+
+Time taken: 0.201 seconds
+
+hive> insert into dataset1_bucketed select * from dataset1;
+
+Query ID = gadirajumidhun6255_20200312092326_b7357a68-30af-4cc4-9117-17e3d59c1f98
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 4
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5234, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5234/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5234
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 4
+
+2020-03-12 09:23:38,506 Stage-1 map = 0%, reduce = 0%
+
+2020-03-12 09:23:44,808 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.5 sec
+
+2020-03-12 09:23:51,177 Stage-1 map = 100%, reduce = 50%, Cumulative CPU 9.79 sec
+
+2020-03-12 09:23:52,242 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 15.93 sec
+
+MapReduce Total cumulative CPU time: 15 seconds 930 msec
+
+Ended Job = job_1582215230149_5234
+
+Loading data to table hive_partitions.dataset1_bucketed
+
+Table hive_partitions.dataset1_bucketed stats: [numFiles=4, numRows=1000, totalSize=60254, rawDataSize=59254]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 4 Cumulative CPU: 15.93 sec HDFS Read: 84035 HDFS Write: 60626 SUCCESS
+
+Total MapReduce CPU Time Spent: 15 seconds 930 msec
+
+OK
+
+Time taken: 28.899 seconds
+
+hive> insert into dataset2_bucketed select * from dataset2;
+
+Query ID = gadirajumidhun6255_20200312092432_aba8c4a6-446a-4f1a-8043-0a79e02a88a8
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 8
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5235, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5235/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5235
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 8
+
+2020-03-12 09:24:40,939 Stage-1 map = 0%, reduce = 0%
+
+2020-03-12 09:24:47,201 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.06 sec
+
+2020-03-12 09:24:54,566 Stage-1 map = 100%, reduce = 38%, Cumulative CPU 14.45 sec
+
+2020-03-12 09:24:55,601 Stage-1 map = 100%, reduce = 75%, Cumulative CPU 25.33 sec
+
+2020-03-12 09:24:58,711 Stage-1 map = 100%, reduce = 88%, Cumulative CPU 27.79 sec
+
+2020-03-12 09:24:59,750 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 30.11 sec
+
+MapReduce Total cumulative CPU time: 30 seconds 110 msec
+
+Ended Job = job_1582215230149_5235
+
+Loading data to table hive_partitions.dataset2_bucketed
+
+Table hive_partitions.dataset2_bucketed stats: [numFiles=8, numRows=1000, totalSize=17719, rawDataSize=16719]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 8 Cumulative CPU: 30.11 sec HDFS Read: 55375 HDFS Write: 18454 SUCCESS
+
+Total MapReduce CPU Time Spent: 30 seconds 110 msec
+
+OK
+
+Time taken: 28.951 seconds
+
+hive> set hive.optimize.bucketmapjoin = true;
+
+hive> SELECT /*+ MAPJOIN(dataset2_bucketed) */ dataset1_bucketed.first_name,dataset1_bucketed.eid, dataset2_bucketed.eid FROM dataset1_bucketed JOIN dataset2_bucketed ON dataset1_bucketed.first_name = dataset2_bucketed.first_name
+
+;
+
+Query ID = gadirajumidhun6255_20200312092620_e84ea01a-956b-4585-be2c-cd33255fa1c6
+
+Total jobs = 1
+
+Execution log at: /tmp/gadirajumidhun6255/gadirajumidhun6255_20200312092620_e84ea01a-956b-4585-be2c-cd33255fa1c6.log
+
+2020-03-12 09:26:24 Starting to launch local task to process map join; maximum memory = 523239424
+
+ 
+
+-----------------------------------------------------------------------------------------------
+
+ 
+
+SMB Join :
+
+ 
+
+hive> Set hive.input.format=org.apache.hadoop.hive.ql.io.BucketizedHiveInputFormat;
+
+hive> set hive.optimize.bucketmapjoin = true;
+
+hive> set hive.optimize.bucketmapjoin.sortedmerge = true;
+
+hive> insert overwrite table dataset1_bucketed select * from dataset1 sort by first_name;
+
+Query ID = gadirajumidhun6255_20200312093422_3e49dac6-f4ea-421c-b870-16b8c173c787
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 4
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5240, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5240/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5240
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 4
+
+2020-03-12 09:34:28,991 Stage-1 map = 0%, reduce = 0%
+
+2020-03-12 09:34:36,267 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.8 sec
+
+2020-03-12 09:34:42,525 Stage-1 map = 100%, reduce = 50%, Cumulative CPU 11.99 sec
+
+2020-03-12 09:34:43,561 Stage-1 map = 100%, reduce = 75%, Cumulative CPU 16.33 sec
+
+2020-03-12 09:34:48,756 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 19.18 sec
+
+MapReduce Total cumulative CPU time: 19 seconds 180 msec
+
+Ended Job = job_1582215230149_5240
+
+Loading data to table hive_partitions.dataset1_bucketed
+
+Table hive_partitions.dataset1_bucketed stats: [numFiles=4, numRows=1000, totalSize=60254, rawDataSize=59254]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 4 Cumulative CPU: 19.18 sec HDFS Read: 84204 HDFS Write: 60626 SUCCESS
+
+Total MapReduce CPU Time Spent: 19 seconds 180 msec
+
+OK
+
+Time taken: 28.424 seconds
+
+hive> insert overwrite table dataset2_bucketed select * from dataset2 sort by first_name;
+
+Query ID = gadirajumidhun6255_20200312093453_8f401d82-d587-4245-b68d-239693edd703
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 8
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5241, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5241/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5241
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 8
+
+2020-03-12 09:35:01,273 Stage-1 map = 0%, reduce = 0%
+
+2020-03-12 09:35:07,522 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.23 sec
+
+2020-03-12 09:35:14,802 Stage-1 map = 100%, reduce = 13%, Cumulative CPU 7.72 sec
+
+2020-03-12 09:35:15,843 Stage-1 map = 100%, reduce = 38%, Cumulative CPU 16.79 sec
+
+2020-03-12 09:35:16,877 Stage-1 map = 100%, reduce = 75%, Cumulative CPU 29.44 sec
+
+2020-03-12 09:35:26,206 Stage-1 map = 100%, reduce = 83%, Cumulative CPU 31.46 sec
+
+2020-03-12 09:35:28,277 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 34.94 sec
+
+MapReduce Total cumulative CPU time: 34 seconds 940 msec
+
+Ended Job = job_1582215230149_5241
+
+Loading data to table hive_partitions.dataset2_bucketed
+
+Table hive_partitions.dataset2_bucketed stats: [numFiles=8, numRows=1000, totalSize=17719, rawDataSize=16719]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 8 Cumulative CPU: 34.94 sec HDFS Read: 55707 HDFS Write: 18454 SUCCESS
+
+Total MapReduce CPU Time Spent: 34 seconds 940 msec
+
+OK
+
+Time taken: 37.324 seconds
+
+hive> CREATE TABLE IF NOT EXISTS dataset2_bucketed1 (eid int,first_name String, last_name String) clustered by(first_name) into 4 buckets row format delimited fields terminated BY ',' ;
+
+OK
+
+Time taken: 0.223 seconds
+
+hive> insert overwrite table dataset2_bucketed1 select * from dataset2 sort by first_name;
+
+Query ID = gadirajumidhun6255_20200312093553_58392704-45cc-4659-9e34-11ab43b5d0f4
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 4
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5243, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5243/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5243
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 4
+
+2020-03-12 09:36:08,848 Stage-1 map = 0%, reduce = 0%
+
+2020-03-12 09:36:16,595 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.25 sec
+
+2020-03-12 09:36:23,093 Stage-1 map = 100%, reduce = 75%, Cumulative CPU 13.92 sec
+
+2020-03-12 09:36:28,439 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 16.6 sec
+
+MapReduce Total cumulative CPU time: 16 seconds 600 msec
+
+Ended Job = job_1582215230149_5243
+
+Loading data to table hive_partitions.dataset2_bucketed1
+
+Table hive_partitions.dataset2_bucketed1 stats: [numFiles=4, numRows=1000, totalSize=17719, rawDataSize=16719]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 4 Cumulative CPU: 16.6 sec HDFS Read: 39103 HDFS Write: 18091 SUCCESS
+
+Total MapReduce CPU Time Spent: 16 seconds 600 msec
+
+OK
+
+Time taken: 37.035 seconds
+
+hive> SELECT /*+ MAPJOIN(dataset2_sbucketed1) */dataset1_bucketed.first_name, dataset1_bucketed.eid, dataset2_bucketed1.eid FROM dataset1_bucketed JOIN dataset2_bucketed1 ON dataset1_bucketed.first_name = dataset2_bucketed1.first_
+
+name ;
+
+ 
+
+ 
+
+--------------------------------------------

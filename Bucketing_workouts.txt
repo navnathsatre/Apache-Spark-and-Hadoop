@@ -1,0 +1,745 @@
+Bucketing :
+
+ 
+
+---------------------------------------------------------------------------------
+
+hive> set hive.enforce.bucketing = true;
+
+hive> create table txnrecords_bucketing(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) clustered by (txnno) into 2 buckets row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile;
+
+OK
+
+Time taken: 0.32 seconds
+
+hive> drop table txnrecords_bucketing;
+
+OK
+
+Time taken: 0.406 seconds
+
+ 
+
+-----------------------------------------------------------------------------------
+
+hive> create table txnrecords_bucketing(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) clustered by (txnno) into 2 buckets row format delimited fie
+
+lds terminated by ',' lines terminated by '\n' stored as textfile location '/user/gadirajumidhun6255/bucketing/';
+
+OK
+
+Time taken: 0.188 seconds
+
+ 
+
+ 
+
+---------------------------------------------------------------------------------------
+
+hive> insert into txnrecords_bucketing select * from txnrecords;
+
+ 
+
+Query ID = gadirajumidhun6255_20200311113830_308ff7c0-2a05-49f7-bffb-2ebba6b28a48
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 2
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5052, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5052/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5052
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 2
+
+2020-03-11 11:38:39,764 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 11:38:48,157 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.08 sec
+
+2020-03-11 11:38:55,469 Stage-1 map = 100%, reduce = 50%, Cumulative CPU 7.35 sec
+
+2020-03-11 11:38:57,561 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 9.84 sec
+
+MapReduce Total cumulative CPU time: 9 seconds 840 msec
+
+Ended Job = job_1582215230149_5052
+
+Loading data to table hive_partitions.txnrecords_bucketing
+
+Table hive_partitions.txnrecords_bucketing stats: [numFiles=2, totalSize=82250]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 2 Cumulative CPU: 9.84 sec HDFS Read: 104930 HDFS Write: 82442 SUCCESS
+
+Total MapReduce CPU Time Spent: 9 seconds 840 msec
+
+OK
+
+Time taken: 28.655 seconds
+
+----------------------------------------------------------------
+
+ 
+
+Now see how we can use bucketing as 3....
+
+ 
+
+hive> create table txnrecords_bucketing_3(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) clustered by (txnno) into 3 buckets row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile location '/user/gadirajumidhun6255/bucketing1/';
+
+OK
+
+Time taken: 0.157 seconds
+
+hive> insert into txnrecords_bucketing_3 select * from txnrecords;
+
+Query ID = gadirajumidhun6255_20200311114942_3449abb8-0c94-45ad-baa8-d9bdde3010bf
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 3
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5053, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5053/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5053
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 3
+
+2020-03-11 11:49:49,427 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 11:49:56,785 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.25 sec
+
+2020-03-11 11:50:03,049 Stage-1 map = 100%, reduce = 67%, Cumulative CPU 10.6 sec
+
+2020-03-11 11:50:04,092 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 13.12 sec
+
+MapReduce Total cumulative CPU time: 13 seconds 120 msec
+
+Ended Job = job_1582215230149_5053
+
+Loading data to table hive_partitions.txnrecords_bucketing_3
+
+Table hive_partitions.txnrecords_bucketing_3 stats: [numFiles=3, totalSize=82250]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 3 Cumulative CPU: 13.12 sec HDFS Read: 110313 HDFS Write: 82544 SUCCESS
+
+Total MapReduce CPU Time Spent: 13 seconds 120 msec
+
+OK
+
+Time taken: 23.028 seconds
+
+hive>
+
+ 
+
+ 
+
+ 
+
+---------------------------------------------------------
+
+ 
+
+bucketing on Date String column ...
+
+ 
+
+ 
+
+hive> create table txnrecords_bucketing_date(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) clustered by (txndate) into 2 buckets row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile location '/user/gadirajumidhun6255/bucketing_date/';
+
+OK
+
+Time taken: 0.207 seconds
+
+hive> insert into txnrecords_bucketing_date select * from txnrecords;
+
+Query ID = gadirajumidhun6255_20200311115646_ce7dc009-87b5-4444-a0be-42e2e2d736fc
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 2
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5054, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5054/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5054
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 2
+
+2020-03-11 11:56:53,523 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 11:57:00,829 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.54 sec
+
+2020-03-11 11:57:07,078 Stage-1 map = 100%, reduce = 50%, Cumulative CPU 6.65 sec
+
+2020-03-11 11:57:08,115 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 11.83 sec
+
+MapReduce Total cumulative CPU time: 11 seconds 830 msec
+
+Ended Job = job_1582215230149_5054
+
+Loading data to table hive_partitions.txnrecords_bucketing_date
+
+Table hive_partitions.txnrecords_bucketing_date stats: [numFiles=2, totalSize=82250]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 2 Cumulative CPU: 11.83 sec HDFS Read: 105034 HDFS Write: 82452 SUCCESS
+
+Total MapReduce CPU Time Spent: 11 seconds 830 msec
+
+OK
+
+Time taken: 23.715 seconds
+
+hive>
+
+-------------------------------------------------------------------
+
+Bucketing on string ...
+
+ 
+
+hive> create table txnrecords_bucketing_string(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) clustered by (category) into 2 buckets row format del
+
+imited fields terminated by ',' lines terminated by '\n' stored as textfile location '/user/gadirajumidhun6255/bucketing_string/';
+
+OK
+
+Time taken: 0.201 seconds
+
+hive> insert into txnrecords_bucketing_string select * from txnrecords;
+
+Query ID = gadirajumidhun6255_20200311120421_ba361c9a-67f1-4c9c-84d8-bc53c769fb50
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 2
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5066, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5066/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5066
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 2
+
+2020-03-11 12:04:30,021 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 12:04:36,343 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.81 sec
+
+2020-03-11 12:04:42,673 Stage-1 map = 100%, reduce = 50%, Cumulative CPU 7.08 sec
+
+2020-03-11 12:04:44,750 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 9.77 sec
+
+MapReduce Total cumulative CPU time: 9 seconds 770 msec
+
+Ended Job = job_1582215230149_5066
+
+Loading data to table hive_partitions.txnrecords_bucketing_string
+
+Table hive_partitions.txnrecords_bucketing_string stats: [numFiles=2, totalSize=82250]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 2 Cumulative CPU: 9.77 sec HDFS Read: 105064 HDFS Write: 82456 SUCCESS
+
+Total MapReduce CPU Time Spent: 9 seconds 770 msec
+
+OK
+
+Time taken: 24.939 seconds
+
+hive>
+
+ 
+
+--------------------------------------------------
+
+Bucketing and partition
+
+ 
+
+ 
+
+hive> create table txnrecords_bucketing_partition(txnno INT, txndate STRING, custno INT, amount DOUBLE,category STRING, product STRING, city STRING, state STRING, spendby STRING) partitioned by (category string) clustered by (txnno) into 2 buckets row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile location '/user/gadirajumidhun6255/bucketing_partition/';
+
+FAILED: SemanticException [Error 10035]: Column repeated in partitioning columns
+
+hive> create table txnrecords_bucketing_partition(txnno INT, txndate STRING, custno INT, amount DOUBLE, product STRING, city STRING, state STRING, spendby STRING) partitioned by (category string) clustered by (txnno) into 2 buckets row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile location '/user/gadirajumidhun6255/bucketing_partition/';
+
+OK
+
+Time taken: 0.155 seconds
+
+hive> insert into txnrecords_bucketing_partition partition(category) select txnno,txndate,custno,amount,product,city,state,spendby,category from txnrecords;
+
+FAILED: SemanticException [Error 10096]: Dynamic partition strict mode requires at least one static partition column. To turn this off set hive.exec.dynamic.partition.mode=nonstrict
+
+hive> set hive.exec.dynamic.partition.mode=nonstrict;
+
+hive> insert into txnrecords_bucketing_partition partition(category) select txnno,txndate,custno,amount,product,city,state,spendby,category from txnrecords;
+
+Query ID = gadirajumidhun6255_20200311125844_1ad9785c-69fe-477b-9119-30f2afffed29
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 2
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5076, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5076/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5076
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 2
+
+2020-03-11 12:58:54,278 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 12:59:00,536 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 3.1 sec
+
+2020-03-11 12:59:07,838 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 12.5 sec
+
+MapReduce Total cumulative CPU time: 12 seconds 500 msec
+
+Ended Job = job_1582215230149_5076
+
+Loading data to table hive_partitions.txnrecords_bucketing_partition partition (category=null)
+
+Time taken to load dynamic partitions: 3.731 seconds
+
+Loading partition {category=Puzzles}
+
+Loading partition {category=Air Sports}
+
+Loading partition {category=Gymnastics}
+
+Loading partition {category=Racquet Sports}
+
+Loading partition {category=Jumping}
+
+Loading partition {category=Outdoor Play Equipment}
+
+Loading partition {category=Indoor Games}
+
+Loading partition {category=Outdoor Recreation}
+
+Loading partition {category=Dancing}
+
+Loading partition {category=Water Sports}
+
+Loading partition {category=Winter Sports}
+
+Loading partition {category=Exercise & Fitness}
+
+Loading partition {category=Team Sports}
+
+Loading partition {category=Games}
+
+Loading partition {category=Combat Sports}
+
+Time taken for adding to write entity : 2
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Air Sports} stats: [numFiles=2, numRows=26, totalSize=1688, rawDataSize=1662]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Combat Sports} stats: [numFiles=2, numRows=43, totalSize=2787, rawDataSize=2744]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Dancing} stats: [numFiles=2, numRows=14, totalSize=939, rawDataSize=925]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Exercise & Fitness} stats: [numFiles=2, numRows=129, totalSize=9412, rawDataSize=9283]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Games} stats: [numFiles=2, numRows=65, totalSize=4439, rawDataSize=4374]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Gymnastics} stats: [numFiles=2, numRows=73, totalSize=5238, rawDataSize=5165]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Indoor Games} stats: [numFiles=2, numRows=64, totalSize=4158, rawDataSize=4094]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Jumping} stats: [numFiles=2, numRows=48, totalSize=3356, rawDataSize=3308]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Outdoor Play Equipment} stats: [numFiles=2, numRows=57, totalSize=3810, rawDataSize=3753]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Outdoor Recreation} stats: [numFiles=2, numRows=140, totalSize=9393, rawDataSize=9253]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Puzzles} stats: [numFiles=2, numRows=12, totalSize=870, rawDataSize=858]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Racquet Sports} stats: [numFiles=2, numRows=34, totalSize=2158, rawDataSize=2124]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Team Sports} stats: [numFiles=2, numRows=124, totalSize=8043, rawDataSize=7919]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Water Sports} stats: [numFiles=2, numRows=112, totalSize=7720, rawDataSize=7608]
+
+Partition hive_partitions.txnrecords_bucketing_partition{category=Winter Sports} stats: [numFiles=2, numRows=59, totalSize=4032, rawDataSize=3973]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 2 Cumulative CPU: 12.5 sec HDFS Read: 105742 HDFS Write: 70834 SUCCESS
+
+Total MapReduce CPU Time Spent: 12 seconds 500 msec
+
+OK
+
+Time taken: 31.49 seconds
+
+ 
+
+-------------------------------------------------------------------------------------
+
+ 
+
+DML operations in Hive:
+
+ 
+
+hive> create table Hive_DML(EmployeeID Int,FirstName String,Designation String, Salary Int,Department String)
+
+> clustered by (department) into 3 buckets
+
+> stored as orc
+
+> TBLPROPERTIES ('transactional'='true');
+
+OK
+
+Time taken: 0.292 seconds
+
+ 
+
+ 
+
+hive> insert into table Hive_DML values (1,'Rohit','MD',88000,'Development');
+
+ 
+
+--------------------------------------------------------------------------------------------------------------------------
+
+Query ID = gadirajumidhun6255_20200311150901_60e4afaf-72d8-4d74-979e-f3cd47b7180f
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 3
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5086, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5086/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5086
+
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 3
+
+2020-03-11 15:09:17,402 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 15:09:25,926 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 2.8 sec
+
+2020-03-11 15:09:33,351 Stage-1 map = 100%, reduce = 67%, Cumulative CPU 12.15 sec
+
+2020-03-11 15:09:35,480 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 15.97 sec
+
+MapReduce Total cumulative CPU time: 15 seconds 970 msec
+
+Ended Job = job_1582215230149_5086
+
+Loading data to table hive_partitions.hive_dml
+
+Table hive_partitions.hive_dml stats: [numFiles=3, numRows=0, totalSize=1385, rawDataSize=0]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 1 Reduce: 3 Cumulative CPU: 15.97 sec HDFS Read: 19363 HDFS Write: 1577 SUCCESS
+
+Total MapReduce CPU Time Spent: 15 seconds 970 msec
+
+OK
+
+Time taken: 35.452 seconds
+
+hive> select * from Hive_DML ;
+
+OK
+
+1 Rohit MD 88000 Development
+
+Time taken: 0.174 seconds, Fetched: 1 row(s)
+
+ 
+
+---------------------------------------------------------------------------------
+
+ 
+
+ 
+
+hive> update Hive_DML set salary = 11111 where employeeid=1;
+
+FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations.
+
+hive> set hive.support.concurrency=true;
+
+hive> set hive.enforce.bucketing=true;
+
+hive> set hive.exec.dynamic.partition.mode=nonstrict;
+
+hive> set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
+
+hive> set hive.compactor.initiator.on=true;
+
+hive> set hive.compactor.worker.threads=1 ;
+
+hive> update Hive_DML set salary = 11111 where employeeid=1;
+
+------------------------------------------------------------------------------------
+
+Query ID = gadirajumidhun6255_20200311151819_5a657c66-9638-4200-a036-23c349452c6e
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 3
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5087, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5087/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5087
+
+Hadoop job information for Stage-1: number of mappers: 3; number of reducers: 3
+
+2020-03-11 15:18:30,473 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 15:18:37,047 Stage-1 map = 33%, reduce = 0%
+
+2020-03-11 15:18:38,113 Stage-1 map = 67%, reduce = 0%, Cumulative CPU 8.87 sec
+
+2020-03-11 15:18:39,159 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 12.24 sec
+
+2020-03-11 15:18:43,551 Stage-1 map = 100%, reduce = 33%, Cumulative CPU 16.28 sec
+
+2020-03-11 15:18:55,392 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 22.87 sec
+
+MapReduce Total cumulative CPU time: 22 seconds 870 msec
+
+Ended Job = job_1582215230149_5087
+
+Loading data to table hive_partitions.hive_dml
+
+Table hive_partitions.hive_dml stats: [numFiles=4, numRows=0, totalSize=2345, rawDataSize=0]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 3 Reduce: 3 Cumulative CPU: 22.87 sec HDFS Read: 36634 HDFS Write: 1144 SUCCESS
+
+Total MapReduce CPU Time Spent: 22 seconds 870 msec
+
+OK
+
+Time taken: 39.027 seconds
+
+hive>
+
+ 
+
+--------------------------------------------------------------------------------------
+
+hive> delete from Hive_DML where employeeid=1;
+
+ 
+
+ 
+
+Query ID = gadirajumidhun6255_20200311153133_f4bf6d25-5e50-46c1-83a3-7c2202feb724
+
+Total jobs = 1
+
+Launching Job 1 out of 1
+
+Number of reduce tasks determined at compile time: 3
+
+In order to change the average load for a reducer (in bytes):
+
+set hive.exec.reducers.bytes.per.reducer=<number>
+
+In order to limit the maximum number of reducers:
+
+set hive.exec.reducers.max=<number>
+
+In order to set a constant number of reducers:
+
+set mapreduce.job.reduces=<number>
+
+Starting Job = job_1582215230149_5090, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1582215230149_5090/
+
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job -kill job_1582215230149_5090
+
+Hadoop job information for Stage-1: number of mappers: 3; number of reducers: 3
+
+2020-03-11 15:31:41,325 Stage-1 map = 0%, reduce = 0%
+
+2020-03-11 15:31:48,644 Stage-1 map = 100%, reduce = 0%, Cumulative CPU 11.92 sec
+
+2020-03-11 15:31:53,876 Stage-1 map = 100%, reduce = 33%, Cumulative CPU 15.06 sec
+
+2020-03-11 15:31:54,916 Stage-1 map = 100%, reduce = 67%, Cumulative CPU 19.48 sec
+
+2020-03-11 15:31:58,039 Stage-1 map = 100%, reduce = 100%, Cumulative CPU 22.35 sec
+
+MapReduce Total cumulative CPU time: 22 seconds 350 msec
+
+Ended Job = job_1582215230149_5090
+
+Loading data to table hive_partitions.hive_dml
+
+Table hive_partitions.hive_dml stats: [numFiles=5, numRows=0, totalSize=2905, rawDataSize=0]
+
+MapReduce Jobs Launched:
+
+Stage-Stage-1: Map: 3 Reduce: 3 Cumulative CPU: 22.35 sec HDFS Read: 34561 HDFS Write: 744 SUCCESS
+
+Total MapReduce CPU Time Spent: 22 seconds 350 msec
+
+OK
+
+Time taken: 26.321 seconds
+
+hive>
+
+-----------------------------------------------------------------------
+Vectorization :
+hive> create table vectorizedtable(state string,id int) stored as orc;
+OK
+Time taken: 0.315 seconds
+hive> insert into vectorizedtable values('haryana',1);
+Query ID = gadirajumidhun6255_20201107113541_b6c4f550-1f81-4621-bee9-a69899023f97
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1602440478847_6767, Tracking URL = http://cxln2.c.thelab-240901.internal:8088/proxy/application_1602440478847_6767/
+Kill Command = /usr/hdp/2.6.2.0-205/hadoop/bin/hadoop job  -kill job_1602440478847_6767
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2020-11-07 11:35:47,544 Stage-1 map = 0%,  reduce = 0%
+2020-11-07 11:35:53,834 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 4.27 sec
+MapReduce Total cumulative CPU time: 4 seconds 270 msec
+Ended Job = job_1602440478847_6767
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://cxln1.c.thelab-240901.internal:8020/apps/hive/warehouse/hive_bucketing.db/vectorizedtable/.hive-staging_hive_2020-11-07_11-35-41_54
+8_4934379106884813238-1/-ext-10000
+Loading data to table hive_bucketing.vectorizedtable
+Table hive_bucketing.vectorizedtable stats: [numFiles=1, numRows=1, totalSize=306, rawDataSize=95]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 4.27 sec   HDFS Read: 4791 HDFS Write: 392 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 270 msec
+OK
+Time taken: 14.048 seconds
+hive> set hive.vectorized.execution.enabled = true;
+hive> explain select count(*) from vectorizedtable;
+OK
+STAGE DEPENDENCIES:
+  Stage-0 is a root stage
+STAGE PLANS:
+  Stage: Stage-0
+    Fetch Operator
+      limit: 1
+      Processor Tree:
+        ListSink
+Time taken: 0.145 seconds, Fetched: 10 row(s)
+hive>  
+
+ 
+
+ 
+
+ 
+
